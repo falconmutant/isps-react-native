@@ -1,19 +1,33 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, Image, Alert } from 'react-native'
+import { TouchableOpacity, Image, PermissionsAndroid, Alert } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker';
 import ModalSelector from 'react-native-modal-selector'
 import {width, height} from './styles'
+import {url} from '../../../constants'
 
 export default class Picture extends Component {
     constructor(props){
         super(props);
         const {image} = this.props.contact;
         this.state = {
-            image: image ? {uri: image.url}: require('../../../assets/images/avatar.png'),
+            image: image ? {uri: url(image.image)}: require('../../../assets/images/avatar.png'),
             visible: false,
             value: ''
         }
     }
+
+    async componentWillMount() {
+      if (Platform.OS === "android") {
+          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, {
+              title: "Acceso a la memoria",
+              message: "Esta aplicación quiere acceder a tu memoria"
+          }).then(() => {
+            console.log("You can use read from the storage")
+          });
+      } else {
+        console.log("Storage permission denied")
+      }
+  }
 
     pickSingleWithCamera(cropping, mediaType='photo') {
         ImagePicker.openCamera({
@@ -29,7 +43,11 @@ export default class Picture extends Component {
           });
           this.props.changePP({
             id: this.props.contact.id,
-            image,
+            image:{
+              uri: image.path,
+              name: image.path.split('/')[image.path.split('/').length-1],
+              type: image.mime
+            },
           });
         }).catch(e => {
             console.log(e);
@@ -55,7 +73,11 @@ export default class Picture extends Component {
           });
           this.props.changePP({
             id: this.props.contact.id,
-            image,
+            image:{
+              uri: image.path,
+              name: image.path.split('/')[image.path.split('/').length-1],
+              type: image.mime
+            },
           });
         }).catch(e => {
           console.log(e);

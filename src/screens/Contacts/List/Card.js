@@ -3,6 +3,7 @@ import { Block, Card } from "../../../themes/galio";
 import { ScrollView, TouchableWithoutFeedback, Text } from "react-native";
 import PropTypes from 'prop-types'
 import styles, { COLORS, SIZES } from './styles'
+import {url} from '../../../constants'
 import Moment from 'react-moment';
 import 'moment/locale/es'
 
@@ -38,7 +39,7 @@ class CardContact extends Component {
                                     title={contact.fullName}
                                     caption={<Moment element={Text} filter={removeFilter} locale='es' toNow>{new Date(contact.doBirth)}</Moment>}
                                     location={contact.clientStatus}
-                                    avatar="http://i.pravatar.cc/100?id=skater"
+                                    avatar={contact.image ? {uri: url(contact.image.image)} : require('../../../assets/images/avatar.png')}
                                     imageStyle={styles.cardImageRadius}
                                     imageBlockStyle={{ padding: SIZES.BASE / 2 }}
                                 />

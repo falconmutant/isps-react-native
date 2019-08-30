@@ -1,36 +1,43 @@
 import { Dimensions, StyleSheet } from 'react-native'
 import { theme } from '../../themes/galio'
+import { materialTheme } from '../../themes/material'
 
-export const { COLORS, SIZES } = theme;
+export const{ SIZES } = theme
+export const { COLORS } = materialTheme
+
 export const { height, width } = Dimensions.get('window');
 
-export default styles = StyleSheet.create({
+
+export default StyleSheet.create({
+    scroll: {
+        width: width - theme.SIZES.BASE * 2,
+        paddingVertical: theme.SIZES.BASE * 2,
+    },
     initBlock: {
-        backgroundColor: COLORS.WHITE,
+        width,
+        height
+    },
+    formBlock: {
+        marginTop: height * 0.1,
     },
     socialBlock: {
-        marginTop: SIZES.BASE * 1.875,
-        marginBottom: height * 0.1,
+        marginTop: theme.SIZES.BASE * 1.875,
     },
     buttonsBlock: {
-        marginVertical: SIZES.BASE * 1.875,
-    },
-    scroll: {
-        width: width - SIZES.BASE * 2,
-        paddingVertical: SIZES.BASE * 2,
+        marginVertical: theme.SIZES.BASE * 1.875,
     },
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
-        paddingTop: SIZES.BASE * 0.3,
-        paddingHorizontal: SIZES.BASE,
-        backgroundColor: COLORS.WHITE,
+        paddingTop: theme.SIZES.BASE * 0.3,
+        paddingHorizontal: theme.SIZES.BASE,
+        backgroundColor: theme.COLORS.WHITE,
     },
     social: {
-        width: SIZES.BASE * 3.5,
-        height: SIZES.BASE * 3.5,
-        borderRadius: SIZES.BASE * 1.75,
+        width: theme.SIZES.BASE * 2.5,
+        height: theme.SIZES.BASE * 2.5,
+        borderRadius: theme.SIZES.BASE * 2.75,
         justifyContent: 'center',
     },
 });

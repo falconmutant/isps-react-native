@@ -18,17 +18,22 @@ export default class DialogName extends Component {
     Cancel = () => {
         const {fullName} = this.props.contact;
         this.setState({
-        display: fullName ? fullName : 'Nombre completo',
-        visible: false,
-        value: fullName ? fullName: '',
+            display: fullName ? fullName : 'Nombre completo',
+            visible: false,
+            value: fullName ? fullName: '',
         })
     };
 
     Press = () => {
+        const {value} = this.state;
+        this.setState({
+            display: value,
+            visible: false,
+            value,
+        });
         this.props.changeProfile({
             id: this.props.contact.id,
-            visible: false,
-            fullName: this.state.value,
+            fullName: value,
         })
     }
     render() {

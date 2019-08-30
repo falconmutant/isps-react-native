@@ -55,7 +55,7 @@ class Header extends Component {
     };
 
     render() {
-        const { back, title, white, transparent, navigation } = this.props;
+        const { back, title, white, transparent, navigation, right } = this.props;
         const { routeName } = navigation.state;
         const noShadow = ['Home', 'Events', 'SignOut'].includes(routeName);
         const headerStyles = [styles.shadow, { backgroundColor: 'rgbs(0,0,0)' },];
@@ -67,7 +67,7 @@ class Header extends Component {
                     title={title}
                     style={[styles.navbar, back ? styles.header : null,]}
                     transparent={transparent}
-                    right={this.renderRight()}
+                    right={ !right ? this.renderRight() : null}
                     rightStyle={{ alignItems: 'center' }}
                     leftStyle={{ paddingVertical: 12, flex: 0.3 }}
                     leftIconColor={white ? COLORS.WHITE : COLORS.ICON}

@@ -16,6 +16,7 @@ class Index extends Component {
 
     render() {
         const contact = this.props.navigation.getParam('contact', 'No contact');
+        console.log(contact);
         return (
             <Block>
                 <ScrollView  showsVerticalScrollIndicator={false}>

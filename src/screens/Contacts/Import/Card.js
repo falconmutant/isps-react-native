@@ -31,7 +31,7 @@ class CardContact extends Component {
                                     img={
                                     contact.hasThumbnail
                                         ? { uri: contact.thumbnailPath }
-                                        : { uri: "../../../assets/images/avatar.png" }
+                                        : require("../../../assets/images/avatar.png")
                                     }
                                     width={40}
                                     height={40}
@@ -46,11 +46,6 @@ class CardContact extends Component {
                                 initialValue={false}
                                 onChange={() => saveImport(contact)}
                             />}
-                            onDelete={() =>
-                            Contacts.deleteContact(contact, () => {
-                                this.loadContacts();
-                            })
-                            }
                         />
                     )
                 })}

@@ -24,9 +24,8 @@ export const MayaQuery = (props) => {
         body: JSON.stringify(data)
     }).then((response) => {
         try{
-            return response.json()
+            if(data.action !== 'logout') return response.json();
         }catch(e){
-            console.log(response);
             return { error: 'Fallo fetch', response }
         }
         
@@ -46,6 +45,7 @@ export const MediaMayaQuery = (props) => {
         headers,
         body: data
     }).then((response) => {
+        console.log(response.text);
         try{
             return response.json()
         }catch(e){

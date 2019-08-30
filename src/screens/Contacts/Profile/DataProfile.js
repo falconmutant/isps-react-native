@@ -7,6 +7,8 @@ import styles, { SIZES } from './styles'
 
 export default class DataProfile extends Component {
     render() {
+        const {contact} = this.props;
+        const {navigate} = this.props.navigation;
         return (
             <Block center style={{ marginTop: -SIZES.BASE * 2 }}>
                 <Block flex style={styles.header}>

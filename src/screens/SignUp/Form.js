@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {Block, Button, Input, Text} from '../../themes/galio'
 import {Field, reduxForm} from 'redux-form'
-import { materialTheme } from '../../themes/material'
+import { COLORS, SIZES } from './styles'
 
-const { COLORS } = materialTheme;
 
 const InputField = (props) => {
     const {placeholder, password, width, input} = props;
@@ -27,7 +26,7 @@ const InputField = (props) => {
 
 class Form extends Component {
     render() {
-        const {width, handleSubmit, register, navigation } = this.props;
+        const {width, handleSubmit, register } = this.props;
         return (
             <Block flex={3} center space="evenly">
                 <Block flex={1}>
@@ -38,20 +37,13 @@ class Form extends Component {
                     <Field name='password' component={InputField} placeholder='Contraseña' width={width} password/>
                     <Field name='confirm' component={InputField} placeholder='Confirmar' width={width} password/>
                 </Block>
-                <Block flex middle>
+                <Block flex middle style={{marginTop: SIZES.BASE}}>
                     <Button
                         round
                         color={COLORS.BLUE}
                         onPress={handleSubmit(register)}
                     >
                         Registrarse
-                    </Button>
-                    <Button
-                        round
-                        color={COLORS.TRANSPARENT}
-                        onPress={() => navigation.navigate('SignIn')}
-                    >
-                        Iniciar Sesión
                     </Button>
                 </Block>
             </Block>

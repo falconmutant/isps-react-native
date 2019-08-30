@@ -9,6 +9,10 @@ export const { height, width } = Dimensions.get('window');
 
 
 export default StyleSheet.create({
+    scroll: {
+        width: width - theme.SIZES.BASE * 2,
+        paddingVertical: theme.SIZES.BASE * 2,
+    },
     initBlock: {
         width,
         height

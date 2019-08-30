@@ -28,6 +28,17 @@ export function* SaveContactDarwin(data){
     }
 }
 
+export function* NewContactDarwin(data){
+    const auth = yield select(getAuth);
+    const response = yield call(SaveContactsApi, {data: {score: 0.0}, ...auth});
+    if(response.hasOwnProperty('MayaMessage')){
+        Alert.alert(response.MayaMessage);
+    }else{
+        yield put({ type: actionsReducers.ADD_CONTACT, payload: response });
+        yield put(NavigationActions.navigate({ routeName: 'Profile', params: {contact: response} }));
+    }
+}
+
 export function* ModifyContactDarwin(data){
     const auth = yield select(getAuth);
     const response = yield call(ModifyContactsApi, {data: data.payload, ...auth});
@@ -43,10 +54,11 @@ export function* PPContactDarwin(data){
     const form = new FormData();
     form.append('image', data.payload.image);
     const response = yield call(PictureApi, {data: form, ...auth});
+    console.log('pasa');
     if(response.hasOwnProperty('MayaMessage')){
         Alert.alert(response.MayaMessage);
     }else{
-        Alert.alert(response.id);
+        console.log(response);
         const modify = yield call(ModifyContactsApi, {data: {id: data.payload.id, image: response.id}, ...auth});
         yield put({ type: actionsReducers.ADD_CONTACT, payload: modify });
     }

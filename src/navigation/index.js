@@ -105,6 +105,24 @@ const ContactsStack = createStackNavigator(
 				headerTransparent: true,
 			})
 		},
+		Phone: {
+			screen: screens.Phone,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
+		Email: {
+			screen: screens.Email,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
+		Address: {
+			screen: screens.Address,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
 	},
 	{
 		cardStyle: { backgroundColor: '#EEEEEE', },

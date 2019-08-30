@@ -44,7 +44,7 @@ class Contacts extends Component {
     renderCards = () => <Card {...this.props} />;
 
     render() {
-        const {navigation} = this.props;
+        const {navigation, addContact} = this.props;
         return (
             <Block flex center style={styles.home}>
                 <Header style={styles.header} search title="Contactos" navigation={navigation} renderSearch={this.renderSearch()} />
@@ -52,7 +52,7 @@ class Contacts extends Component {
                 <FloatingAction
                     actions={actions}
                     onPressItem={name => {
-                        (name === 'bt_new') ? navigation.navigate({ routeName: 'NewContact' }) : navigation.navigate({ routeName: 'ImportContact' });
+                        (name === 'bt_new') ? addContact() : navigation.navigate({ routeName: 'ImportContact' });
                     }}
                 />
             </Block>
@@ -68,6 +68,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     getContacts: () => {
         dispatch({ type: actionsReducers.GET_CONTACTS });
+    },
+    addContact: () => {
+        dispatch({ type: actionsReducers.NEW_CONTACT });
     },
 });
 

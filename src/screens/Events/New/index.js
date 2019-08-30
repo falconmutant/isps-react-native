@@ -6,9 +6,11 @@ import { materialTheme } from '../../../themes/material'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import MapView from 'react-native-maps'
 import {connect} from 'react-redux'
+import Geolocation from '@react-native-community/geolocation';
 
 import Tabs from "../List/Tabs";
 import {actionsReducers} from "../../../constants";
+
 
 const { width, height } = Dimensions.get('screen');
 const { COLORS, SIZES} = theme;
@@ -38,17 +40,24 @@ class NewEvent extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.watchID != null && Geolocation.clearWatch(this.watchID);
+    }
+
     findCoordinates = () => {
-        navigator.geolocation.getCurrentPosition(
+        Geolocation.getCurrentPosition(
             position => {
-                const location = JSON.stringify(position);
-                console.log(location);
-                SAMPLE_REGION['latitude'] = location.latitude;
-                SAMPLE_REGION['longitude'] = location.longitude;
+                const initialPosition = JSON.stringify(position);
+                console.log(initialPosition)
             },
-            error => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+            error => Alert.alert('Error', JSON.stringify(error)),
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
         );
+        
+        this.watchID = Geolocation.watchPosition(position => {
+            const lastPosition = JSON.stringify(position);
+            console.log(lastPosition)
+        });
     };
 
     constructor(props){
@@ -62,6 +71,8 @@ class NewEvent extends Component {
             EndDateObject: new Date(),
             StartDate: this.DateToString(new Date()),
             EndDate: this.DateToString(new Date()),
+            initialPosition: '',
+            lastPosition: '',
         };
     }
 

@@ -41,7 +41,7 @@ class Card extends Component {
     const { avatar, styles } = this.props;
     if (!avatar) return null;
 
-    return <Image source={{ uri: avatar }} style={styles.avatar} />;
+    return <Image source={avatar} style={styles.avatar} />;
   }
 
   renderLocation() {

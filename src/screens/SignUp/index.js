@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import { Block } from '../../themes/galio'
-import { Header } from '../../components/material'
+import { Block, Button, Text } from '../../themes/galio'
 import SignUpForm from './Form'
-import styles, { width } from './styles'
+import styles, { width, COLORS, SIZES } from './styles'
 import { actionsReducers } from '../../constants'
+import Social from './Social'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import {ScrollView} from "react-native";
+import {ScrollView, ImageBackground} from "react-native";
 
 class SignUp extends Component {
     static propTypes = {
@@ -14,16 +14,25 @@ class SignUp extends Component {
     };
 
     render() {
-        const { navigation, register } = this.props;
+        const { navigation } = this.props;
         return (
-            <Block flex={1} style={styles.initBlock}>
-                <Header back title="Registro" navigation={navigation} />
+            <ImageBackground source={require('../../assets/images/signup_background.jpeg')} style={styles.initBlock}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.scroll}>
-                    <SignUpForm navigation={navigation} register={register} width={width} />
+                    contentContainerStyle={styles.event}>
+                    <Block flex style={styles.formBlock} />
+                    <Block flex center space="evenly">
+                        <Button color="transparent" shadowless  onPress={() => navigation.navigate('SignIn')}>
+                            <Text center color={COLORS.ERROR} size={SIZES.FONT * 0.75}>
+                                {"¿Ya tienes una cuenta? Ingresa"}
+                            </Text>
+                        </Button>
+                    </Block>
+                    <Social />
+                    <SignUpForm {...this.props} width={width} />
+                    <Block flex style={styles.formBlock} />
                 </ScrollView>
-            </Block>
+            </ImageBackground>
         );
     }
 }

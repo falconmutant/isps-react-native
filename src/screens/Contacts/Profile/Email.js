@@ -5,9 +5,8 @@ import { FloatingAction } from 'react-native-floating-action'
 import { Header } from "../../../components/material"
 import { actionsReducers } from "../../../constants"
 import Dialog from 'react-native-dialog'
-import ModalSelector from 'react-native-modal-selector'
 
-import Card from './components/Phone/Card'
+import Card from './components/Email/Card'
 
 const actions = [
     {
@@ -18,16 +17,13 @@ const actions = [
     },
 ];
 
-class Phone extends Component {
+class Email extends Component {
     constructor(props){
         super(props);
         console.log(props);
         this.state = {
             visible: false,
-            code: '',
-            number: '',
-            type: '',
-            display: '',
+            email: '',
             contact: this.props.navigation.getParam('contact', 'No contact'),
         }
     }
@@ -49,41 +45,27 @@ class Phone extends Component {
     Cancel = () => {
         this.setState({
             visible: false,
-            code: '',
-            number: '',
-            type: '',
-            display: '',
+            email: '',
         })
     };
 
     Press = () => {
         const {contact} = this.state;
-        contact.phone.push({
-            areaCode: this.state.code,
-            phoneNumber: this.state.number,
-            phoneType: this.state.type,
+        contact.profile_email.push({
+            emailAddress: this.state.email,
         });
         this.setState({
             visible: false,
-            code: '',
-            number: '',
-            type: '',
-            display: '',
+            email: '',
         });
         this.props.changeProfile({
             id: contact.id,
-            phone: contact.phone,
+            profile_email: contact.profile_email,
         });
     }
-
+    
     render() {
         const {navigation} = this.props;
-        const data = [
-            { key: 1, section: true, label: 'Tipo de numero' },
-            { key: 2, label: 'Trabajo', value: 'WORK' },
-            { key: 3, label: 'Casa', value: 'HOME' },
-            { key: 4, label: 'Celular', value: 'MOBILE' },
-        ];
         return (
             <Block flex center style={styles.home}>
                 <Header style={styles.header} back title="" navigation={navigation} />
@@ -93,21 +75,11 @@ class Phone extends Component {
                     onPressItem={ name => (name === 'bt_new') ? this.setState({visible: true}): {}}
                 />
                 <Dialog.Container visible={this.state.visible}>
-                    <Dialog.Title>Nuevo telefono</Dialog.Title>
+                    <Dialog.Title>Nuevo correo</Dialog.Title>
                     <Dialog.Description>
-                        Ingresa telefono.
+                        Ingresa correo.
                     </Dialog.Description>
-                    <Dialog.Input placeholder='Lada' onChangeText={(e) => this.setState({code: e})} />
-                    <Dialog.Input placeholder='Numero' onChangeText={(e) => this.setState({number: e})} />
-                    <ModalSelector
-                        data={data}
-                        initValue="Tipo"
-                        onChange={option => { this.setState({type:option.value, display:option.label}) }}>
-                        <Dialog.Input 
-                            editable={false} 
-                            placeholder='Tipo'
-                            value={this.state.display} />
-                    </ModalSelector>
+                    <Dialog.Input placeholder='Correo electronico' onChangeText={(e) => this.setState({email: e})} />
                     <Dialog.Button label="Cancelar" onPress={this.Cancel} />
                     <Dialog.Button label="OK" onPress={this.Press} />
                 </Dialog.Container>
@@ -125,4 +97,4 @@ const mapDispatchToProps = dispatch => ({
     },
 });
 
-export default connect(null, mapDispatchToProps)(Phone)
+export default connect(null, mapDispatchToProps)(Email)

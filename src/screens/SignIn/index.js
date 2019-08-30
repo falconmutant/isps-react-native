@@ -5,9 +5,8 @@ import { Block, Button, Text } from '../../themes/galio'
 import SignInForm from "./Form";
 import Social from './Social'
 import { actionsReducers } from '../../constants'
-import styles, { width } from './styles'
+import styles, { width, COLORS, SIZES } from './styles'
 import PropTypes from "prop-types";
-import { COLORS, SIZES } from './styles'
 
 
 class SignIn extends Component {

@@ -12,6 +12,7 @@ function* Darwin(){
     yield takeLatest(actionsReducers.VALIDATE_AUTH, auth.ValidateAuthDarwin);
     yield takeLatest(actionsReducers.GET_CONTACTS, contact.ContactsDarwin);
     yield takeLatest(actionsReducers.SAVE_CONTACT, contact.SaveContactDarwin);
+    yield takeLatest(actionsReducers.NEW_CONTACT, contact.NewContactDarwin);
     yield takeLatest(actionsReducers.SAVE_PROFILE_PICTURE_CONTACT, contact.PPContactDarwin);
     yield takeLatest(actionsReducers.MODIFY_PROFILE_CONTACT, contact.ModifyContactDarwin);
     yield takeLatest(actionsReducers.GET_EVENTS, event.EventsDarwin);
