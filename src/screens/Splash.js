@@ -3,8 +3,8 @@ import { View } from 'react-native'
 import Video from 'react-native-video'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { actionsReducers } from '../../constants'
-import styles from './styles'
+
+import {actionsReducers, styles, Files} from '../layout'
 
 class Splash extends Component {
     static propTypes = {
@@ -23,9 +23,9 @@ class Splash extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.containerSplash}>
                 <Video
-                    source={require('../../assets/videos/splash_isps.mp4')}
+                    source={Files.splash}
                     style={styles.video}
                     muted={true}
                     repeat={true}

@@ -27,7 +27,7 @@ export default class Picture extends Component {
       } else {
         console.log("Storage permission denied")
       }
-  }
+    }
 
     pickSingleWithCamera(cropping, mediaType='photo') {
         ImagePicker.openCamera({

@@ -1,58 +1,38 @@
 import React, { Component } from 'react'
 import {Alert} from 'react-native'
-import { Block, Button, Text, theme } from '../../themes/galio'
-import styles from './styles'
+
+import { Block, Button, Text, styles, COLORS, SIZES } from '../../layout'
+
+const data = [
+    {icon: 'facebook',},
+    {icon: 'twitter',},
+    {icon: 'google',},
+];
 
 export default class Social extends Component {
     render() {
         return (
             <Block flex center style={styles.socialBlock}>
-                <Text muted center size={theme.SIZES.FONT * 0.875}>
+                <Text muted center size={SIZES.FONT * 0.875}>
                     o ingresa
                 </Text>
                 <Block row center space="between" style={styles.buttonsBlock}>
-                    <Block flex middle right>
-                        <Button
-                            round
-                            onlyIcon
-                            shadowless
-                            iconSize={theme.SIZES.BASE * 1.625}
-                            icon="facebook"
-                            iconFamily="Font-Awesome"
-                            color="transparent"
-                            iconColor={theme.COLORS.WHITE}
-                            style={styles.social}
-                            onPress={() => Alert.alert('No implementado')}
-                        />
-                    </Block>
-                    <Block flex middle center>
-                        <Button
-                            round
-                            onlyIcon
-                            shadowless
-                            iconSize={theme.SIZES.BASE * 1.625}
-                            icon="twitter"
-                            iconFamily="Font-Awesome"
-                            color="transparent"
-                            iconColor={theme.COLORS.WHITE}
-                            style={styles.social}
-                            onPress={() => Alert.alert('No implementado')}
-                        />
-                    </Block>
-                    <Block flex middle left>
-                        <Button
-                            round
-                            onlyIcon
-                            shadowless
-                            iconSize={theme.SIZES.BASE * 1.625}
-                            icon="google"
-                            iconFamily="Font-Awesome"
-                            color="transparent"
-                            iconColor={theme.COLORS.WHITE}
-                            style={styles.social}
-                            onPress={() => Alert.alert('No implementado')}
-                        />
-                    </Block>
+                    {data.map((icon, i) => (
+                        <Block key={i} flex middle right>
+                            <Button
+                                round
+                                onlyIcon
+                                shadowless
+                                iconSize={SIZES.BASE * 1.625}
+                                icon={icon.icon}
+                                iconFamily="Font-Awesome"
+                                color="transparent"
+                                iconColor={COLORS.WHITE}
+                                style={styles.social}
+                                onPress={() => Alert.alert('No implementado')}
+                            />
+                        </Block>
+                    ))}
                 </Block>
             </Block>
         )

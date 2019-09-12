@@ -1,27 +1,25 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { call, put } from 'redux-saga/effects'
+import { call, put, select } from 'redux-saga/effects'
 import { NavigationActions } from 'react-navigation'
 import { actionsReducers, MayaQuery } from '../constants'
 
-export function* EventsDarwin(data){
-    try {
-        const response = yield call(EventsApi, data.payload);
-        if('MayaMessage' in response){
-            Alert.alert(response.MayaMessage);
-        }else{
-            yield put({ type: actionsReducers.SET_EVENTS, payload: response });
-        }
-    } catch (error) {
-        put({ type: actionsReducers.LOGIN_FAIL, payload: error });
-        yield put(NavigationActions.navigate({ routeName: 'Auth' }));
-    }
+const getAuth = (state) => state.auth;
 
+export function* EventsDarwin(){
+    const auth = yield select(getAuth);
+    const response = yield call(EventsApi, {...auth});
+    if(response.hasOwnProperty('MayaMessage')){
+        Alert.alert(response.MayaMessage);
+    }else{
+        yield put({ type: actionsReducers.SET_EVENTS, payload: response });
+    }
 }
 
 export function* SaveEventDarwin(data){
-    const response = yield call(SaveEventsApi, data.payload);
-    if('MayaMessage' in response){
+    const auth = yield select(getAuth);
+    const response = yield call(SaveEventsApi, {data: data.payload, ...auth});
+    if(response.hasOwnProperty('MayaMessage')){
         Alert.alert(response.MayaMessage);
     }else{
         yield put({ type: actionsReducers.ADD_EVENT, payload: response });

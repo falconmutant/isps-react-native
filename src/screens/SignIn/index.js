@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import { ScrollView, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
-import { Block, Button, Text } from '../../themes/galio'
+import PropTypes from "prop-types";
+
+import { Block, Button, Text, styles, COLORS, SIZES, Files, actionsReducers} from '../../layout'
+
 import SignInForm from "./Form";
 import Social from './Social'
-import { actionsReducers } from '../../constants'
-import styles, { width, COLORS, SIZES } from './styles'
-import PropTypes from "prop-types";
 
 
 class SignIn extends Component {
@@ -21,16 +21,16 @@ class SignIn extends Component {
     render() {
         const {navigation} = this.props;
         return (
-            <ImageBackground source={require('../../assets/images/signin_background.png')} style={styles.initBlock}>
+            <ImageBackground source={Files.SignIn} style={styles.initBlock}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.events}>
+                    contentContainerStyle={{}}>
                     <Block flex style={styles.formBlock} />
-                    <SignInForm {...this.props} width={width} />
+                    <SignInForm {...this.props} />
                     <Social />
                     <Block flex center space="evenly">
                         <Button color="transparent" shadowless  onPress={() => navigation.navigate('SignUp')}>
-                            <Text center color={COLORS.ERROR} size={SIZES.FONT * 0.75}>
+                            <Text center color={COLORS.MATERIAL_ERROR} size={SIZES.FONT * 0.75}>
                                 {"¿No tienes una cuenta? Regístrate"}
                             </Text>
                         </Button>

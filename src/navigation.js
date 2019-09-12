@@ -1,18 +1,15 @@
 import React from 'react'
-import {Easing, Animated, ScrollView, Dimensions} from 'react-native'
+import {Easing, Animated, ScrollView} from 'react-native'
 import {createSwitchNavigator, createStackNavigator, createDrawerNavigator, DrawerItems} from 'react-navigation'
-import {Block, Text} from '../themes/galio'
-import { Header, Drawer } from '../components/material'
-import MenuProfile from './Menu'
-import * as screens from '../screens'
-import styles from './styles'
 
-const { width } = Dimensions.get('screen');
+import {Block, Text, Header, Drawer, Menu, styles, width} from './layout'
+import * as screens from '../screens'
+
 
 const DrawerMenu = props => (
 	<Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-		<Block flex={0.2} style={styles.header}>
-			<MenuProfile {...props}/>
+		<Block flex={0.2} style={styles.headerDrawer}>
+			<Menu {...props}/>
 		</Block>
 		<Block flex>
 			<ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
@@ -22,7 +19,7 @@ const DrawerMenu = props => (
 	</Block>
 );
 
-const Menu = {
+const MenuContent = {
 	contentComponent: props => <DrawerMenu {...props} />,
 	drawerBackgroundColor: 'white',
 	drawerWidth: width * 0.8,
@@ -84,6 +81,7 @@ const transitionConfig = (transitionProps, prevTransitionProps) => ({
       return { transform: [{ translateX }] }
     }
 })
+
 
 const ContactsStack = createStackNavigator(
 	{
@@ -227,7 +225,7 @@ const AppStack = createDrawerNavigator(
 			}),
 		},
 	},
-	Menu
+	MenuContent
 );
 
 const AuthStack = createSwitchNavigator(

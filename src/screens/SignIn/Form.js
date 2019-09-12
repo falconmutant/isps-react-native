@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Block, Button, Input, Text } from '../../themes/galio'
-import { COLORS, SIZES } from './styles'
 
+import { Block, Button, Input, Text, width, COLORS, SIZES } from '../../layout'
 
 
 const InputField = (props) => {
-    const {placeholder, password, width, input} = props;
+    const {placeholder, password, input} = props;
     return(
         <Block flex={1}>
             <Input
@@ -20,21 +19,21 @@ const InputField = (props) => {
                 onChangeText={input.onChange}
                 onBlur={props.input.onBlur}
             />
-            {props.meta.touched && props.meta.error && <Text color={COLORS.ERROR}>{props.meta.error}</Text>}
+            {props.meta.touched && props.meta.error && <Text color={COLORS.MATERIAL_ERROR}>{props.meta.error}</Text>}
         </Block>
     )
 };
 
 class Form extends Component {
     render() {
-        const { width, handleSubmit, login } = this.props;
+        const { handleSubmit, login } = this.props;
         return (
             <Block flex={3} center space="evenly">
                 <Block flex={1}>
-                    <Field name='username' component={InputField} placeholder='Usuario' width={width}/>
-                    <Field name='password' component={InputField} placeholder='Contraseña' width={width} password/>
+                    <Field name='username' component={InputField} placeholder='Usuario' />
+                    <Field name='password' component={InputField} placeholder='Contraseña' password />
                     <Text
-                        color={COLORS.ERROR}
+                        color={COLORS.material_ERROR}
                         size={SIZES.FONT * 0.75}
                         style={{alignSelf: 'flex-end', lineHeight: SIZES.FONT * 2}}
                     >
