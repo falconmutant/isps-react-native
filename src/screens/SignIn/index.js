@@ -3,7 +3,7 @@ import { ScrollView, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 
-import { Block, Button, Text, styles, COLORS, SIZES, Files, actionsReducers} from '../../layout'
+import { Block, Button, Text, styles, COLORS, SIZES, actionsReducers} from '../../layout'
 
 import SignInForm from "./Form";
 import Social from './Social'
@@ -21,7 +21,7 @@ class SignIn extends Component {
     render() {
         const {navigation} = this.props;
         return (
-            <ImageBackground source={Files.SignIn} style={styles.initBlock}>
+            <ImageBackground source={require('../../assets/images/signin_background.png')} style={styles.initBlock}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{}}>
@@ -43,7 +43,7 @@ class SignIn extends Component {
 
 const mapDispatchToProps = dispatch => ({
     login: (values) => {
-        dispatch({ type: actionsReducers.LOGIN, payload: values});
+        dispatch({ type: actionsReducers.LOGIN, payload: values });
     },
 });
 

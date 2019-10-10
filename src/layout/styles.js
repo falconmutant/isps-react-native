@@ -1,5 +1,8 @@
-import { StyleSheet } from 'react-native'
-import { COLORS, SIZES, width, height } from './index'
+import { StyleSheet, Dimensions } from 'react-native'
+import { theme } from './index'
+
+export const { COLORS, SIZES } = theme;
+export const { width, height } = Dimensions.get('screen');
 
 export default StyleSheet.create({
     search: {
@@ -22,8 +25,24 @@ export default StyleSheet.create({
         zIndex: 5,
         width: width,
     },
+    navbarProfile: {
+        top: SIZES.BASE,
+        left: 0,
+        right: 0,
+        zIndex: 9999,
+        position: 'absolute',
+    },
     header: {
         backgroundColor: COLORS.WHITE,
+    },
+    headerProfile: {
+        backgroundColor: COLORS.WHITE,
+        borderTopLeftRadius: SIZES.BASE * 2,
+        borderTopRightRadius: SIZES.BASE * 2,
+        paddingVertical: SIZES.BASE * 2,
+        paddingHorizontal: SIZES.BASE * 1.5,
+        width,
+        height,
     },
     title: {
         width: '100%',
@@ -37,6 +56,7 @@ export default StyleSheet.create({
         marginBottom: 24,
         marginTop: 10,
         elevation: 4,
+        width: width,
     },
     tab: {
         backgroundColor: COLORS.TRANSPARENT,
@@ -58,7 +78,7 @@ export default StyleSheet.create({
         paddingHorizontal: 16,
     },
     activeStyle: {
-        backgroundColor: COLORS.MATERIAL_ACTIVE,
+        backgroundColor: COLORS.BLUE,
         borderRadius: 4,
     },
     shadowDrawer: {
@@ -71,7 +91,7 @@ export default StyleSheet.create({
         shadowOpacity: 0.2
     },
     profile: {
-        marginBottom: tSIZES.BASE / 2,
+        marginBottom: SIZES.BASE / 2,
     },
     avatar: {
         height: 40,
@@ -162,6 +182,10 @@ export default StyleSheet.create({
         width: 'auto',
         height: SIZES.CARD_IMAGE_HEIGHT,
     },
+    mapFull: {
+        width,
+        height: height - (SIZES.BASE * 3),
+    },
     mapBlock: {
         borderWidth: 0,
         overflow: 'hidden',
@@ -191,5 +215,12 @@ export default StyleSheet.create({
         flex:1,
         paddingTop: 30
     },
-    
+    title2: {
+        justifyContent: 'center',
+    },
+    avatar2: {
+        width: SIZES.CARD_AVATAR_WIDTH,
+        height: SIZES.CARD_AVATAR_HEIGHT,
+        borderRadius: SIZES.CARD_AVATAR_RADIUS,
+    },
 });

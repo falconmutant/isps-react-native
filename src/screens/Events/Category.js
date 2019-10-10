@@ -1,24 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import {Screen, Cardboard, Dialog, Input, Icon, styles, COLORS, SIZES, Files, actionsReducers} from '../../layout'
+import {Screen, Card, Dialog, Input, Icon, styles, width, COLORS, SIZES, actionsReducers} from '../../layout'
 
 const dataTabs = [
     {title: 'Eventos', icon: 'list', target: 'Events'},
     {title: 'Calendario', icon: 'calendar', target: 'Calendar'},
-    {title: 'Categorias', icon: 'book', target: 'Category'},
+    {title: 'Categorias', icon: 'book', target: 'EventCategory'},
 ];
 
 const actions = [
     {
         text: "Evento",
-        icon: Files.event,
+        icon: require('../../assets/images/event.png'),
         name: "bt_event",
         position: 2
     },
     {
-        text: "Catalogo",
-        icon: Files.catalog,
+        text: "Categoria",
+        icon: require('../../assets/images/catalog.png'),
         name: "bt_catalog",
         position: 1
     }
@@ -26,20 +26,17 @@ const actions = [
 
 
 class Category extends Component {
-    constructor(props){
-        super(props);
-        this.state={
-            categories: this.props.categories,
-            visible: '',
-            value:''
-        }
+    state={
+        data: [],
+        visible: false,
+        value:''
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.subs = [
             this.props.navigation.addListener('willFocus', () => {
                 this.props.getCategories();
-                this.setState({ categories: this.props.categories });
+                this.setState({ data: this.props.categories });
             }),
         ];
     }
@@ -48,16 +45,20 @@ class Category extends Component {
         this.subs.forEach(sub => sub.remove());
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({data: nextProps.categories});
+    }
+
     search = text => {
         const {categories} = this.props;
         if (text === "" || text === null) {
-            this.setState({ events: categories });
+            this.setState({ data: categories });
         } else {
             const matching = [];
             categories.map(category =>{
-                if(text in category.category) matching.push(category)
+                if(category.category.indexOf(text) >= 0) matching.push(category)
             });
-            this.setState({ categories: matching });
+            this.setState({ data: matching });
         }
     }
 
@@ -68,22 +69,23 @@ class Category extends Component {
 
     onCancel = () => {
         this.setState({
-            visible: '',
+            visible: false,
             value:''
         });
     }
 
     onConfirm = () => {
-        const {value} = this.state;
+        const {value, data} = this.state;
         this.props.saveCategory({
             category: value
         });
-        this.setState({ visible: false, value: '' })
+        data.push({ category: value })
+        this.setState({ visible: false, value: '', data })
     }
 
     render() {
         const {navigation} = this.props;
-        const {categories} = this.state;
+        const {data, visible, value} = this.state;
         return (
             <Screen
             search
@@ -96,8 +98,8 @@ class Category extends Component {
             floating={true}
             dataFloating={actions}
             onPressFloating={this.onPress}>
-                {categories.map((category, i) => {
-                    <Cardboard
+                {data.map((category, i) => (
+                    <Card
                         key={i}
                         flex
                         borderless
@@ -109,7 +111,7 @@ class Category extends Component {
                         imageStyle={styles.cardImageRadius}
                         imageBlockStyle={{ padding: SIZES.BASE / 2 }}
                     />
-                })}
+                ))}
                 <Dialog 
                     visible={visible}
                     title='Categoria'
@@ -142,7 +144,7 @@ const mapDispatchToProps = dispatch => ({
     },
     saveCategory: (data) => {
         dispatch({
-            type: actionsReducers.ADD_CATEGORY,
+            type: actionsReducers.SAVE_CATEGORY,
             payload: data,
         });
     },

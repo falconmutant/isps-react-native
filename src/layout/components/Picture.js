@@ -3,14 +3,14 @@ import { TouchableOpacity, Image, PermissionsAndroid, Alert } from 'react-native
 import ImagePicker from 'react-native-image-crop-picker';
 import ModalSelector from 'react-native-modal-selector'
 
-import {Files, url, width, height} from '../index'
+import { url, width, height} from '../index'
 
 export default class Picture extends Component {
     constructor(props){
         super(props);
         const {image} = this.props.contact;
         this.state={
-            image: image ? {uri: url(image.image)} : Files.avatar,
+            image: image ? {uri: url(image.image)} : require(''),
             visible: '',
             value: '',
         }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { TouchableOpacity } from 'react-native'
 import DateTimePicker from 'react-native-modal-datetime-picker'
-import { Block, Text, Icon } from '../../../../../themes/galio'
-import styles from '../../styles'
+
+import {Block, Text, Icon, styles } from '../../../../../layout'
 
 const months = ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 

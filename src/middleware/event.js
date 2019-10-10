@@ -1,4 +1,3 @@
-import React from 'react'
 import { Alert } from 'react-native'
 import { call, put, select } from 'redux-saga/effects'
 import { NavigationActions } from 'react-navigation'
@@ -27,6 +26,27 @@ export function* SaveEventDarwin(data){
     }
 }
 
+export function* CategoriesDarwin(){
+    const auth = yield select(getAuth);
+    const response = yield call(CategoriesApi, {...auth});
+    if(response.hasOwnProperty('MayaMessage')){
+        Alert.alert(response.MayaMessage);
+    }else{
+        yield put({ type: actionsReducers.SET_CATEGORIES, payload: response });
+    }
+}
+
+export function* SaveCategoryDarwin(data){
+    const auth = yield select(getAuth);
+    const response = yield call(SaveCategoryApi, {data: data.payload, ...auth});
+    if(response.hasOwnProperty('MayaMessage')){
+        Alert.alert(response.MayaMessage);
+        console.log(response);
+    }else{
+        yield put({ type: actionsReducers.ADD_CATEGORY, payload: response });
+    }
+}
+
 const SaveEventsApi = ({data, token}) => {
     return MayaQuery({
         target: 'api/',
@@ -50,7 +70,37 @@ const EventsApi = ({user, token}) => {
             action: 'get',
             model: {
                 search: {
-                    user: user.id
+                    user_id: user.id
+                }
+            }
+        }
+    });
+};
+
+const SaveCategoryApi = ({data, token}) => {
+    return MayaQuery({
+        target: 'api/',
+        token,
+        data: {
+            target: 'eventcategory',
+            action: 'add',
+            model: {
+                ...data
+            }
+        }
+    });
+};
+
+const CategoriesApi = ({user, token}) => {
+    return MayaQuery({
+        target: 'api/',
+        token,
+        data: {
+            target: 'eventcategory',
+            action: 'get',
+            model: {
+                search: {
+                    user_id: user.id
                 }
             }
         }

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import SignUpForm from './Form'
 import Social from './Social'
 
-import {Block, Button, Text, styles, COLORS, SIZES, actionsReducers, Files} from '../../layout'
+import {Block, Button, Text, styles, COLORS, SIZES, actionsReducers} from '../../layout'
 
 
 class SignUp extends Component {
@@ -17,7 +17,7 @@ class SignUp extends Component {
     render() {
         const { navigation } = this.props;
         return (
-            <ImageBackground source={Files.signUp} style={styles.initBlock}>
+            <ImageBackground source={require('../../assets/images/signup_background.jpeg')} style={styles.initBlock}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{}}>
@@ -40,7 +40,7 @@ class SignUp extends Component {
 
 const mapDispatchToProps = dispatch => ({
     register: (values) => {
-        dispatch({ type: actionsReducers.REGISTER, payload: values});
+        dispatch({ type: actionsReducers.REGISTER, payload: values });
     },
 });
 

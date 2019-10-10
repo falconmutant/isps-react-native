@@ -5,7 +5,7 @@ import {Block, Button, Icon, Text, styles, width} from '../index'
 export default class Tabs extends Component {
     render() {
         const {tabsData, navigation} = this.props;
-        const style = {width: width * (tabsData.length / 10)};
+        const style = {width: width * (100 / tabsData.length *.01)};
         return (
             <Block row style={styles.tabs}>
                 {tabsData.map((tab, i) =>(

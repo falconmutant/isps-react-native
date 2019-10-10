@@ -17,20 +17,9 @@ export function* ContactsDarwin(){
     }
 }
 
-export function* SaveContactDarwin(data){
-    const auth = yield select(getAuth);
-    const response = yield call(SaveContactsApi, {data: data.payload, ...auth});
-    if(response.hasOwnProperty('MayaMessage')){
-        Alert.alert(response.MayaMessage);
-    }else{
-        yield put({ type: actionsReducers.ADD_CONTACT, payload: response });
-        yield put(NavigationActions.navigate({ routeName: 'Contacts' }));
-    }
-}
-
 export function* NewContactDarwin(data){
     const auth = yield select(getAuth);
-    const response = yield call(SaveContactsApi, {data: {score: 0.0}, ...auth});
+    const response = yield call(SaveContactsApi, {data: {...data.payload, score: 0.0 }, ...auth});
     if(response.hasOwnProperty('MayaMessage')){
         Alert.alert(response.MayaMessage);
     }else{
@@ -54,7 +43,7 @@ export function* PPContactDarwin(data){
     const form = new FormData();
     form.append('image', data.payload.image);
     const response = yield call(PictureApi, {data: form, ...auth});
-    console.log('pasa');
+    console.log('pasa', response);
     if(response.hasOwnProperty('MayaMessage')){
         Alert.alert(response.MayaMessage);
     }else{
@@ -96,7 +85,6 @@ const ModifyContactsApi = ({data, token}) => {
 
 const PictureApi = ({data, token}) => {
     return MediaMayaQuery({
-        target: 'api/media/',
         token,
         data
     });

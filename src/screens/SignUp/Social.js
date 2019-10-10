@@ -30,7 +30,7 @@ export default class Social extends Component {
                         </Block>
                     ))}
                 </Block>
-                <Text muted center size={theme.SIZES.FONT * 1.875}>
+                <Text muted center size={SIZES.FONT * 1.875}>
                     o
                 </Text>
             </Block>

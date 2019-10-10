@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
+import {Text, View } from 'react-native';
 import { connect } from 'react-redux'
 import { LocaleConfig, Agenda } from 'react-native-calendars'
 
-import {Screen, styles} from '../../layout'
+import {Screen, styles, actionsReducers} from '../../layout'
 
 const dataTabs = [
     {title: 'Eventos', icon: 'list', target: 'Events'},
     {title: 'Calendario', icon: 'calendar', target: 'Calendar'},
-    {title: 'Categorias', icon: 'book', target: 'Category'},
+    {title: 'Categorias', icon: 'book', target: 'EventCategory'},
 ];
 
 LocaleConfig.locales['es'] = {
@@ -21,14 +22,11 @@ LocaleConfig.defaultLocale = 'es';
 
 
 class Calendar extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            events: []
-        }
+    state = {
+        items: {},
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.subs = [
             this.props.navigation.addListener('willFocus', () => {
                 this.props.getEvents();
@@ -40,15 +38,26 @@ class Calendar extends Component {
         this.subs.forEach(sub => sub.remove());
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({ events: nextProps.events });
+    }
+
     loadItems(day){
-        const items = [];
+        const {items} = this.state;
         this.props.events.map(event =>{
-            const strTime = event.split('T')[0]
-            !items[strTime] ? 
-            items.push({strTime: [{ name: event.name, text: event.description }]}) : 
-            items[strTime].push({ name: event.name, text: event.description}) ;
+            const strTime = event.start.split('T')[0]
+            !items[strTime] ?
+            items[strTime] = [{
+                name: event.name,
+                text: event.description
+            }] :
+            items[strTime].push({
+                name: event.name,
+                text: event.description
+            });
         });
-        this.setState({ events: items });
+        this.setState({ items });
+        console.log(this.state.items, this.state.events);
     }
 
     renderItem = (item) => {
@@ -75,9 +84,11 @@ class Calendar extends Component {
             tabs
             tabsData={dataTabs}
             title="Calendario"
-            navigation={navigation}>
+            navigation={navigation}
+            back
+            noScroll={true}>
                 <Agenda
-                    items={this.state.events}
+                    items={this.state.items}
                     loadItemsForMonth={this.loadItems.bind(this)}
                     selected={new Date()}
                     renderItem={this.renderItem.bind(this)}

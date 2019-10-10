@@ -111,4 +111,4 @@ class Cardboard extends Component {
     }
 }
 
-export default withGalio(Cardboard, styles);
+export default Cardboard;

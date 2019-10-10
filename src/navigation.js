@@ -3,7 +3,7 @@ import {Easing, Animated, ScrollView} from 'react-native'
 import {createSwitchNavigator, createStackNavigator, createDrawerNavigator, DrawerItems} from 'react-navigation'
 
 import {Block, Text, Header, Drawer, Menu, styles, width} from './layout'
-import * as screens from '../screens'
+import * as screens from './screens'
 
 
 const DrawerMenu = props => (
@@ -121,6 +121,18 @@ const ContactsStack = createStackNavigator(
 				headerTransparent: true,
 			})
 		},
+		NewAddress: {
+			screen: screens.NewAddress,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
+		Map: {
+			screen: screens.Map,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
 	},
 	{
 		cardStyle: { backgroundColor: '#EEEEEE', },
@@ -136,14 +148,56 @@ const EventsStack = createStackNavigator(
 				headerTransparent: true,
 			})
 		},
+		NewEvent: {
+			screen: screens.NewEvents,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
 		Calendar: {
 			screen: screens.Calendar,
 			navigationOptions: () => ({
 				headerTransparent: true,
 			})
 		},
-		NewEvent: {
-			screen: screens.NewEvent,
+		EventCategory: {
+			screen: screens.EventCategory,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
+	},
+	{
+		cardStyle: { backgroundColor: '#EEEEEE', },
+		transitionConfig,
+	}
+);
+
+const CatalogsStack = createStackNavigator(
+	{
+		Catalogs: {
+			screen: screens.Catalogs,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
+		Products: {
+			screen: screens.Products,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
+	},
+	{
+		cardStyle: { backgroundColor: '#EEEEEE', },
+		transitionConfig,
+	}
+);
+
+const UptakesStack = createStackNavigator(
+	{
+		Uptakes: {
+			screen: screens.Uptakes,
 			navigationOptions: () => ({
 				headerTransparent: true,
 			})
@@ -169,12 +223,24 @@ const HomeStack = createStackNavigator(
 		Events: {
 			screen: screens.Events
 		},
+		Catalogs: {
+			screen: screens.Catalogs
+		},
+		Uptakes: {
+			screen: screens.Uptakes
+		},
 		SignOut: {
 			screen: screens.SignOut,
 			navigationOptions: ({navigation}) => ({
 				header: <Header back white transparent title="" navigation={navigation} />,
 			})
-		}
+		},
+		Map: {
+			screen: screens.Map,
+			navigationOptions: () => ({
+				headerTransparent: true,
+			})
+		},
 	},
 	{
 		cardStyle: {
@@ -190,7 +256,7 @@ const AppStack = createDrawerNavigator(
 			screen: HomeStack,
 			navigationOptions: (navOpt) => ({
 				drawerLabel: ({focused}) => (
-					<Drawer focused={focused} title="Home" />
+					<Drawer focused={focused} title="Home" icon="home" />
 				),
 			}),
 		},
@@ -198,7 +264,7 @@ const AppStack = createDrawerNavigator(
 			screen: ContactsStack,
 			navigationOptions: (navOpt) => ({
 				drawerLabel: ({focused}) => (
-					<Drawer focused={focused} title="Contactos" />
+					<Drawer focused={focused} title="Contactos" icon="users" />
 				),
 			}),
 		},
@@ -206,7 +272,23 @@ const AppStack = createDrawerNavigator(
 			screen: EventsStack,
 			navigationOptions: (navOpt) => ({
 				drawerLabel: ({focused}) => (
-					<Drawer focused={focused} title="Eventos" />
+					<Drawer focused={focused} title="Eventos" icon="calendar" />
+				),
+			}),
+		},
+		UserCatalogs: {
+			screen: CatalogsStack,
+			navigationOptions: (navOpt) => ({
+				drawerLabel: ({focused}) => (
+					<Drawer focused={focused} title="Catalogos" icon="book" />
+				),
+			}),
+		},
+		UserUptakes:{
+			screen: UptakesStack,
+			navigationOptions: (navOpt) => ({
+				drawerLabel: ({focused}) => (
+					<Drawer focused={focused} title="Pedidos" icon="cart-arrow-down" />
 				),
 			}),
 		},
@@ -220,7 +302,7 @@ const AppStack = createDrawerNavigator(
 			screen: screens.SignOut,
 			navigationOptions: (navOpt) => ({
 				drawerLabel: ({focused}) => (
-					<Drawer focused={focused} title="Salir" />
+					<Drawer focused={focused} title="Salir" icon="sign-out" />
 				),
 			}),
 		},

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { ScrollView } from 'react-native'
 import { DrawerActions } from 'react-navigation'
-import { Block } from '../../themes/galio'
-import styles from './styles'
+
+import { Block, styles } from '../../layout'
 
 class Dashboard extends Component {
     componentDidMount(){
@@ -11,6 +11,7 @@ class Dashboard extends Component {
     }
 
     render() {
+        const {navigation} = this.props;
         return (
             <Block flex center style={styles.home}>
                 <ScrollView

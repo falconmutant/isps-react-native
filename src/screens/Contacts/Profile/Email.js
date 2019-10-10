@@ -1,89 +1,122 @@
 import React, { Component } from 'react'
+import { TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import { Block } from '../../../themes/galio'
-import { FloatingAction } from 'react-native-floating-action'
-import { Header } from "../../../components/material"
-import { actionsReducers } from "../../../constants"
-import Dialog from 'react-native-dialog'
 
-import Card from './components/Email/Card'
+import {Screen, Card, Icon, Input, Dialog, styles, width, COLORS, SIZES, actionsReducers } from '../../../layout'
 
-const actions = [
-    {
-        text: "Nuevo",
-        icon: require("../../../assets/images/event.png"),
-        name: "bt_new",
-        position: 2
-    },
-];
 
 class Email extends Component {
     constructor(props){
         super(props);
-        console.log(props);
+        this.contact = props.navigation.getParam('contact', 'No contact');
         this.state = {
+            actions: [
+                {
+                    text: "Nuevo",
+                    icon: require("../../../assets/images/event.png"),
+                    name: "bt_new",
+                    position: 1
+                },
+            ],
+            emails: this.contact.profile_email,
             visible: false,
             email: '',
-            contact: this.props.navigation.getParam('contact', 'No contact'),
         }
     }
 
-    componentDidMount() {
-        this.subs = [
-            this.props.navigation.addListener('willFocus', () => {
-                this.renderCards();
-            }),
-        ];
-    }
-
-    componentWillUnmount () {
-        this.subs.forEach(sub => sub.remove());
-    }
-
-    renderCards = () => <Card contact={this.state.contact} {...this.props} />;
-
-    Cancel = () => {
+    onCancel = () => {
         this.setState({
             visible: false,
             email: '',
         })
     };
 
-    Press = () => {
-        const {contact} = this.state;
-        contact.profile_email.push({
-            emailAddress: this.state.email,
-        });
+    onConfirm = () => {
+        const {emails, email} = this.state;
+        emails.push({ emailAddress: email });
         this.setState({
             visible: false,
             email: '',
+            emails,
         });
         this.props.changeProfile({
-            id: contact.id,
-            profile_email: contact.profile_email,
+            id: this.contact.id,
+            profile_email: emails,
         });
+    }
+
+    onDelete(pos) {
+        const {emails} = this.state;
+        this.setState({ emails: emails.splice(pos, emails.length) });
+        this.props.changeProfile({
+            id: this.contact.id,
+            profile_email: emails.splice(pos, phones.length),
+        });
+    }
+
+    search = text => {
+        if (text === "" || text === null) {
+            this.setState({ emails: this.contact.profile_email });
+        } else {
+            const {emails} = this.contact.profile_email;
+            const matching = [];
+            emails.map(email =>{
+                if(email.emailAddress.indexOf(text) >= 0) matching.push(email);
+            });
+            this.setState({ emails: matching });
+        }
     }
     
     render() {
         const {navigation} = this.props;
+        const {actions, emails, visible, email} = this.state;
         return (
-            <Block flex center style={styles.home}>
-                <Header style={styles.header} back title="" navigation={navigation} />
-                {this.renderCards()}
-                <FloatingAction
-                    actions={actions}
-                    onPressItem={ name => (name === 'bt_new') ? this.setState({visible: true}): {}}
-                />
-                <Dialog.Container visible={this.state.visible}>
-                    <Dialog.Title>Nuevo correo</Dialog.Title>
-                    <Dialog.Description>
-                        Ingresa correo.
-                    </Dialog.Description>
-                    <Dialog.Input placeholder='Correo electronico' onChangeText={(e) => this.setState({email: e})} />
-                    <Dialog.Button label="Cancelar" onPress={this.Cancel} />
-                    <Dialog.Button label="OK" onPress={this.Press} />
-                </Dialog.Container>
-            </Block>
+            <Screen
+            back
+            search
+            onChangeSearch={this.search}
+            placeholderSearch='Buscar correo'
+            title="Correos"
+            navigation={navigation}
+            floating={true}
+            dataFloating={actions}
+            onPressFloating={name => name === 'bt_new' ? this.setState({visible: !visible}) : null}>
+                {emails.map((email, i) => (
+                    <Card
+                        key={i}
+                        flex
+                        borderless
+                        shadowColor={COLORS.BLACK}
+                        style={styles.card}
+                        title={email.emailAddress}
+                        location={
+                            <TouchableOpacity onPress={() => this.Delete(i)}>
+                                <Icon name="trash" family="font-awesome" style={{ paddingRight: 5 }} />
+                            </TouchableOpacity>
+                        }
+                        caption={<Icon name="envelope" family="font-awesome" style={{ paddingRight: 5 }} />}
+                        imageStyle={styles.cardImageRadius}
+                        imageBlockStyle={{ padding: SIZES.BASE / 2 }}
+                    />
+                ))}
+                <Dialog 
+                    visible={visible}
+                    title='Nuevo correo'
+                    subtitle='Ingresa correo.'
+                    labelCancel='CANCELAR'
+                    labelConfirm='OK'
+                    onCancel={this.onCancel}
+                    onConfirm={this.onConfirm}>
+                    <Input
+                        rounded
+                        type={'default'}
+                        placeholder={'correo electronico'}
+                        style={{width: width - SIZES.BASE * 4}}
+                        onChangeText={(e) => this.setState({email: e})}
+                        value={email}
+                    />
+                </Dialog>
+            </Screen>
         )
     }
 }

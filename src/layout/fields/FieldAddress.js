@@ -1,89 +1,76 @@
 import React, { Component } from 'react'
 import { Platform, PermissionsAndroid, TouchableOpacity } from 'react-native'
 import Geolocation from '@react-native-community/geolocation';
-import MapView from 'react-native-maps'
+import  MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import PropTypes from 'prop-types';
 
 import { Block, styles, width, height } from '../index'
 
-export default class FieldAddress extends Component {
 
+export default class FieldAddress extends Component {
     constructor(props){
         super(props);
-        this.state={
-            location: {
-                latitude: 0.0,
-                longitude: 0.0,
-                latitudeDelta: 0.0055,
-                longitudeDelta: 0.0055 * (width / height),
-            }
-        }
+        this.state = {
+            latitude: props.region ? parseFloat(props.latitude) : 0,
+            longitude: props.region ? parseFloat(props.longitude) : 0,
+            error: null
+        };
     }
+      
 
-    async componentWillMount() {
+    async componentDidMount() {
         if (Platform.OS === "android") {
             PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
                 title: "Ubicación",
-                message: "Esta aplicación quiere acceder a tu ubicación"
+                message: "Esta aplicación requiere acceder a tu ubicación"
             }).then(() => {
-                this.findCoordinates();
+                if(!this.props.region) this.findCoordinates();
             });
         } else {
-            this.findCoordinates();
+            if(!this.props.region) this.findCoordinates();
         }
     }
 
     componentWillUnmount() {
-        this.watchID != null && Geolocation.clearWatch(this.watchID);
+        if (this.watchID) Geolocation.clearWatch(this.watchID);
+    }
+
+    onRegionChange(region) {
+        this.state.region.setValue(region);
     }
 
     findCoordinates = () => {
-        const {location} = this.state;
-        const _this = this;
-        Geolocation.getCurrentPosition(
-            position => {
-                const initialPosition = JSON.stringify(position);
-                console.log(initialPosition);
-                const {latitude, longitude} = initialPosition;
-                _this.setState({
-                    location: {
-                        ...location,
-                        latitude,
-                        longitude
-                    }
-                });
-            },
-            error => Alert.alert('Error', JSON.stringify(error)),
-            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-        );
-        
         this.watchID = Geolocation.watchPosition(position => {
-            const {location} = this.state;
-            const lastPosition = JSON.stringify(position);
-            console.log(lastPosition)
-            const {latitude, longitude} = lastPosition;
-            _this.setState({
-                location: {
-                    ...location,
-                    latitude,
-                    longitude
-                }
-            });
+            const {latitude, longitude} = position.coords;
+            console.log(latitude, longitude);
+            this.setState({ latitude, longitude});
         });
+        
+        console.log(this.state);
     };
 
+    setRegion = () => ({
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        latitudeDelta: 0.0055,
+        longitudeDelta: 0.0055
+    });
+
     render() {
-        const {navigation} = this.props;
-        const {location} = this.state;
+        const {navigation, saveField} = this.props;
         return (
             <Block>
-                <TouchableOpacity onPress={() => navigation.navigate('Map', {location})}>
+                <TouchableOpacity onPress={() => navigation.navigate('Map', {
+                        location: this.state,
+                        saveField: saveField.bind(this),
+                    })}>
                     <Block shadow style={styles.card}>
                         <Block card style={styles.mapBlock}>
                             <MapView
                                 liteMode
                                 key={'map-0'}
                                 style={styles.map}
-                                initialRegion={location}
+                                region={this.setRegion()}
                             />
                         </Block>
                     </Block>

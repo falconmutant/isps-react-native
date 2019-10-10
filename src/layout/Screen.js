@@ -6,20 +6,20 @@ import { Block, Header, Search, Tabs, styles } from './index'
 
 export default class Screen extends Component {
     render() {
-        const {search, tabs, floating, dataFloating, onPressFloating, children} = this.props;
+        const {search, tabs, floating, dataFloating, onPressFloating, styleHeader, children, noScroll} = this.props;
         return (
             <Block flex center style={styles.home}>
                 <Header {...this.props}>
-                    <Block center style={styles.header}>
+                    <Block center style={[styles.header, styleHeader ? styleHeader : null]}>
                         {search ? <Search {...this.props} /> : null}
                         {tabs ? <Tabs {...this.props} /> : null}
                     </Block>
                 </Header>
-                <ScrollView
+                { noScroll ? children : <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scroll}>
                     {children}
-                </ScrollView>
+                </ScrollView>}
                 {floating ? <FloatingAction actions={dataFloating} onPressItem={onPressFloating}  /> : null}
             </Block>
         )

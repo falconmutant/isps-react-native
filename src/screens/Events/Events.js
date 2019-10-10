@@ -4,26 +4,26 @@ import { connect } from 'react-redux'
 import Moment from 'react-moment';
 import 'moment/locale/es'
 
-import {Screen, Cardboard, Dialog, Input, styles, COLORS, SIZES, Files, actionsReducers} from '../../layout'
+import {Screen, Card, Dialog, Input, styles, width, COLORS, SIZES, actionsReducers} from '../../layout'
 
 
 
 const dataTabs = [
     {title: 'Eventos', icon: 'list', target: 'Events'},
     {title: 'Calendario', icon: 'calendar', target: 'Calendar'},
-    {title: 'Categorias', icon: 'book', target: 'Category'},
+    {title: 'Categorias', icon: 'book', target: 'EventCategory'},
 ];
 
 const actions = [
     {
         text: "Evento",
-        icon: Files.event,
+        icon: require('../../assets/images/event.png'),
         name: "bt_event",
         position: 2
     },
     {
-        text: "Catalogo",
-        icon: Files.catalog,
+        text: "Categoria",
+        icon: require('../../assets/images/catalog.png'),
         name: "bt_catalog",
         position: 1
     }
@@ -31,20 +31,17 @@ const actions = [
 
 
 class Events extends Component {
-    constructor(props){
-        super(props);
-        this.state={
-            events: this.props.events,
-            visible: false,
-            value: '',
-        }
+    state = {
+        data: [],
+        visible: false,
+        value: '',
     }
 
-    componentDidMount() {
+    componentDidMount(){
         this.subs = [
             this.props.navigation.addListener('willFocus', () => {
                 this.props.getEvents();
-                this.setState({ events: this.props.events });
+                this.setState({ data: this.props.events});
             }),
         ];
     }
@@ -53,16 +50,20 @@ class Events extends Component {
         this.subs.forEach(sub => sub.remove());
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({data: nextProps.events});
+    }
+
     search = text => {
         if (text === "" || text === null) {
-            this.setState({ events: this.props.events });
+            this.setState({ data: this.props.events });
         } else {
             const {events} = this.props;
             const matching = [];
             events.map(event =>{
-                if(text in event.name) matching.push(event)
+                if(event.name.indexOf(text) >= 0) matching.push(event)
             });
-            this.setState({ events: matching });
+            this.setState({ data: matching });
         }
     }
 
@@ -87,8 +88,13 @@ class Events extends Component {
     }
 
     render() {
-        const {navigation} = this.props;
-        const {events} = this.state;
+        const {navigation, events} = this.props;
+        const {data, visible, value} = this.state;
+        const checkFilter = (d) => {
+            if(parseInt(d) > 24) return `${parseInt(parseInt(d)/24)} días`;
+            if(parseInt(d) < 24) return `${d} horas`;
+            return ""
+        };
         return (
             <Screen
             search
@@ -101,9 +107,9 @@ class Events extends Component {
             floating={true}
             dataFloating={actions}
             onPressFloating={this.onPress}>
-                {events.map((event, i) => {
+                {data.map((event, i) => (
                     <TouchableOpacity key={i} onPress={() => navigation.navigate('Detail', {event})}>
-                        <Cardboard
+                        <Card
                             flex
                             borderless
                             shadowColor={COLORS.BLACK}
@@ -111,7 +117,8 @@ class Events extends Component {
                             map={true}
                             dataMap={{
                                 lat: parseFloat(event.latitude),
-                                lng: parseFloat(event.longitude)
+                                lng: parseFloat(event.longitude),
+                                key: i,
                             }}
                             footer={true}
                             title={event.name}
@@ -129,7 +136,7 @@ class Events extends Component {
                             imageBlockStyle={{ padding: SIZES.BASE / 2 }}
                         />
                     </TouchableOpacity>
-                })}
+                ))}
                 <Dialog 
                     visible={visible}
                     title='Categoria'
@@ -162,7 +169,7 @@ const mapDispatchToProps = dispatch => ({
     },
     saveCategory: (data) => {
         dispatch({
-            type: actionsReducers.ADD_CATEGORY,
+            type: actionsReducers.SAVE_CATEGORY,
             payload: data,
         });
     },

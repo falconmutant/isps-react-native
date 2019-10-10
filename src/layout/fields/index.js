@@ -1,11 +1,7 @@
+import FieldInput from './FieldInput'
 import FieldAddress from './FieldAddress'
-import FieldDate from './FieldDate'
-import FieldName from './FieldName'
-import FieldPublic from './FieldPublic'
 
 export {
+    FieldInput,
     FieldAddress,
-    FieldDate,
-    FieldName,
-    FieldPublic,
 }

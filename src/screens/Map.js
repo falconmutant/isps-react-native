@@ -5,105 +5,103 @@ import MapView, { Marker, ProviderPropType } from 'react-native-maps';
 
 import {Screen, styles, width, height} from '../layout'
 
+let id = 0;
+
+function randomColor() {
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, 0)}`;
+}
+
 export default class Map extends Component {
     constructor(props){
         super(props);
+        const location = props.navigation.getParam('location', 'location');
         this.state={
-            region: {
-                latitude: 0.0,
-                longitude: 0.0,
-                latitudeDelta: 0.0055,
-                longitudeDelta: 0.0055 * (width / height),
-            },
-            coordinates: ''
+            latitude: typeof location === 'object' ? location.latitude : 0,
+            longitude: typeof location === 'object' ? location.longitude : 0,
+            markers: [],
         }
     }
 
-    async componentWillMount() {
+    async componentdidMount() {
+        this.mounted = true;
         if (Platform.OS === "android") {
             PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
                 title: "Ubicación",
-                message: "Esta aplicación quiere acceder a tu ubicación"
-            }).then(() => {
-                this.findCoordinates();
-            });
-        } else {
-            this.findCoordinates();
+                message: "Esta aplicación requiere acceder a tu ubicación"
+            }).then(() => {});
         }
     }
 
     componentWillUnmount() {
-        const {region} = this.state;
-        const _this = this;
-        this.watchID != null && Geolocation.clearWatch(this.watchID, region, _this);
+        this.mounted = false;
+        if (this.watchID) Geolocation.clearWatch(this.watchID);
     }
 
     findCoordinates = () => {
-        const {region} = this.state;
-        const _this = this;
-        Geolocation.getCurrentPosition(
-            position => {
-                const initialPosition = JSON.stringify(position);
-                console.log(initialPosition);
-                const {latitude, longitude} = initialPosition;
-                _this.setState({
-                    region: {
-                        ...region,
-                        latitude,
-                        longitude
-                    }
-                });
-            },
-            error => Alert.alert('Error', JSON.stringify(error)),
-            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-        );
-        
-        this.watchID = Geolocation.watchPosition((position, region, _this) => {
-            const lastPosition = JSON.stringify(position);
-            console.log(lastPosition)
-            const {latitude, longitude} = lastPosition;
-            _this.setState({
-                region: {
-                    ...region,
-                    latitude,
-                    longitude
-                }
-            });
+        this.watchID = Geolocation.watchPosition(position => {
+            const {latitude, longitude} = position.coords;
+            console.log(latitude, longitude);
+            this.setState({ latitude, longitude});
         });
-    }
+        
+        console.log(this.state);
+    };
 
-    onMapPress(e){
-        this.setState({ coordinates: e.nativeEvent.coordinate})
+    setRegion = e => (e ? e : {
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        latitudeDelta: 0.0055,
+        longitudeDelta: 0.0055
+    });
+
+    onMapPress(e) {
+        this.setState({
+            markers: [
+                {
+                    coordinate: e.nativeEvent.coordinate,
+                    key: id++,
+                    color: randomColor(),
+                },
+            ],
+        });
+        const {latitude, longitude} = e.nativeEvent.coordinate;
+        this.props.navigation.state.params.saveField({latitude, longitude});
     }
 
     log(eventName, e) {
         console.log(eventName, e.nativeEvent);
-        this.setState({ coordinates: e.nativeEvent.coordinate})
+        this.onMapPress(e);
+    }
+
+    onChangeRegion(e){
+        console.log('changeRegion', e);
     }
 
     render() {
-        const {region, coordinate} = this.state;
+        const {markers} = this.state;
         const {navigation, provider} = this.props;
         return (
             <Screen
             back
+            noScroll = {true}
             title="Lugar"
             navigation={navigation}>
                 <MapView
                     provider={provider}
-                    style={styles.map}
-                    initialRegion={region}
-                    onPress={e => this.onMapPress}
+                    style={styles.mapFull}
+                    initialRegion={this.setRegion()}
+                    onPress={e => this.onMapPress(e)}
+                    onRegionChange={e => this.setRegion(e)}
                 >
-                    <Marker
-                        coordinate={coordinate}
-                        onSelect={e => log('onSelect', e)}
-                        onDrag={e => log('onDrag', e)}
-                        onDragStart={e => log('onDragStart', e)}
-                        onDragEnd={e => log('onDragEnd', e)}
-                        onPress={e => log('onPress', e)}
-                        draggable
-                    />
+                    {markers.map(marker => (
+                        <Marker
+                        key={marker.key}
+                        coordinate={marker.coordinate}
+                        pinColor={marker.color}
+                        />
+                    ))}
                 </MapView>
             </Screen>
         )

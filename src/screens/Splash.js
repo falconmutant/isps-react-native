@@ -4,7 +4,7 @@ import Video from 'react-native-video'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import {actionsReducers, styles, Files} from '../layout'
+import {actionsReducers, styles} from '../layout'
 
 class Splash extends Component {
     static propTypes = {
@@ -25,7 +25,7 @@ class Splash extends Component {
         return (
             <View style={styles.containerSplash}>
                 <Video
-                    source={Files.splash}
+                    source={require('../assets/videos/splash_isps.mp4')}
                     style={styles.video}
                     muted={true}
                     repeat={true}
@@ -42,7 +42,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     validateAuth: () => {
-        dispatch({ type: actionsReducers.VALIDATE_AUTH });
+        dispatch({ type: actionsReducers.VALIDATE });
     },
 });
 

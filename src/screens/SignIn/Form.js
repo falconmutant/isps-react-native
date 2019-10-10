@@ -33,9 +33,9 @@ class Form extends Component {
                     <Field name='username' component={InputField} placeholder='Usuario' />
                     <Field name='password' component={InputField} placeholder='Contraseña' password />
                     <Text
-                        color={COLORS.material_ERROR}
+                        color={COLORS.MATERIAL_ERROR}
                         size={SIZES.FONT * 0.75}
-                        style={{alignSelf: 'flex-end', lineHeight: SIZES.FONT * 2}}
+                        style={{alignSelf: 'flex-end', lineHeight: SIZES.FONT * 2, paddingBottom: SIZES.BASE}}
                     >
                         ¿Olvidaste tu contraseña?
                     </Text>

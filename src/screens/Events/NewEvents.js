@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
-import {connect} from 'react-native'
-import {Screen, BlockList, RowList, Block, FieldName, FieldDate, FieldPublic, FieldAddress, styles, COLORS, SIZES, width } from '../../layout'
+import {connect} from 'react-redux'
+import {Screen, BlockList, RowList, Block, Button, styles, COLORS, SIZES, width, actionsReducers } from '../../layout'
+
+import { FieldName, FieldDate, FieldPublic, FieldAddress } from './fields'
 
 
 class NewEvents extends Component {
     constructor(props){
         super(props);
-        this.state={
-            name: null,
-            start: null,
-            end: null,
-            isPublic: null,
-        }
+        this.state={}
     }
 
-    saveField = field => this.setState(field);
+    saveField = field => {
+        this.setState(field);
+        console.log(field, this.state);
+    };
 
     saveEvent = e => {
         e.preventDefault();
@@ -22,6 +22,7 @@ class NewEvents extends Component {
     };
 
     render() {
+        const {navigation} = this.props;
         return (
             <Screen
             back
@@ -29,14 +30,14 @@ class NewEvents extends Component {
             navigation={navigation}>
                 <BlockList title='Datos del evento' description='Nombre, Fecha, Publico.'>
                     <Block style={{marginVertical: SIZES.CARD_MARGIN_VERTICAL}}>
-                        <FieldName saveField={this.saveField} field={this.state} />
-                        <FieldDate name='start' saveField={this.saveField} field={this.state} />
-                        <FieldDate name='end' saveField={this.saveField} field={this.state} />
-                        <FieldPublic saveField={this.saveField} field={this.state} />
+                        <FieldName saveField={this.saveField} fields={this.state} />
+                        <FieldDate name='start' saveField={this.saveField} fields={this.state} />
+                        <FieldDate name='end' saveField={this.saveField} fields={this.state} />
+                        <FieldPublic saveField={this.saveField} fields={this.state} />
                     </Block>
                 </BlockList>
                 <BlockList title='Lugar del evento' description=''>
-                    <FieldAddress saveField={this.saveField} field={this.state} />
+                    <FieldAddress navigation={navigation} saveField={this.saveField} fields={this.state} />
                 </BlockList>
                 <BlockList title='Configuración' description='Notificaciones, Categoria, Extras.'>
                     <Block style={{marginVertical: SIZES.CARD_MARGIN_VERTICAL}}>

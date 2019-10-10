@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import { StatusBar, ScrollView } from 'react-native';
-import { Block, NavBar, theme } from '../../../themes/galio';
-import styles from "./styles";
 import { connect } from 'react-redux'
-import {actionsReducers} from '../../../constants'
+
+import { Block, NavBar, styles, COLORS, actionsReducers} from '../../../layout'
 
 import DataProfile from './DataProfile'
 import ProfilePicture from './Picture'
@@ -21,8 +20,8 @@ class Index extends Component {
             <Block>
                 <ScrollView  showsVerticalScrollIndicator={false}>
                     <StatusBar barStyle="light-content" />
-                    <Block style={styles.navbar}>
-                        <NavBar back transparent leftIconColor={theme.COLORS.BLACK} onLeftPress={() => this.props.navigation.goBack()} />
+                    <Block style={styles.navbarProfile}>
+                        <NavBar back transparent leftIconColor={COLORS.BLACK} onLeftPress={() => this.props.navigation.goBack()} />
                     </Block>
                     <ProfilePicture {...this.props} contact={contact} />
                     <DataProfile {...this.props}  contact={contact} />

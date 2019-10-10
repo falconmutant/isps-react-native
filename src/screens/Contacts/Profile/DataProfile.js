@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { FullName, DoBirth, MaritalStatus, Category } from './components/DataProfile'
-import { Block, Text, Icon } from '../../../themes/galio'
-import styles, { SIZES } from './styles'
+
+import {Block, Text, Icon, styles, SIZES} from '../../../layout'
 
 
 export default class DataProfile extends Component {
@@ -11,7 +11,7 @@ export default class DataProfile extends Component {
         const {navigate} = this.props.navigation;
         return (
             <Block center style={{ marginTop: -SIZES.BASE * 2 }}>
-                <Block flex style={styles.header}>
+                <Block flex style={styles.headerProfile}>
                     <Block style={styles.title}>
                         <Text bold center size={SIZES.BASE} style={{ paddingBottom: 5 }}>
                             Datos del contacto

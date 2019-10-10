@@ -10,11 +10,11 @@ const ASPECT_RATIO = width / height;
 
 class Card extends Component {
   renderImage() {
-    const { image, map, imageBlockStyle, imageStyle, styles } = this.props;
+    const { image, map, dataMap, imageBlockStyle, imageStyle, styles } = this.props;
     if (map) {
       const SAMPLE_REGION = {
-        latitude: map.lat,
-        longitude: map.lng,
+        latitude: dataMap.lat,
+        longitude: dataMap.lng,
         latitudeDelta: 0.0055,
         longitudeDelta: 0.0055 * ASPECT_RATIO,
       };
@@ -22,7 +22,7 @@ class Card extends Component {
         <Block card style={[styles.imageBlock, imageBlockStyle]}>
           <MapView
               liteMode
-              key={'map-0'}
+              key={`Map-${dataMap.key}`}
               style={styles.map}
               initialRegion={SAMPLE_REGION}
           />
@@ -32,7 +32,7 @@ class Card extends Component {
     if (!image) return null;
     return (
       <Block card style={[styles.imageBlock, imageBlockStyle]}>
-        <Image source={{ uri: image }} style={[styles.image, imageStyle]} />
+        <Image source={image} style={[styles.image, imageStyle]} />
       </Block>
     );
   }
@@ -66,12 +66,12 @@ class Card extends Component {
   }
 
   renderAuthor() {
-    const { title, titleColor, caption, captionColor, footerStyle, theme, styles } = this.props;
+    const { title, avatar, titleColor, caption, captionColor, footerStyle, theme, styles } = this.props;
 
     return (
       <Block flex row style={[styles.footer, footerStyle]} space="between">
-        <Block flex={0.3}>{this.renderAvatar()}</Block>
-        <Block flex={1.7}>
+        {avatar ? <Block flex={0.3}>{this.renderAvatar()}</Block> : null}
+        <Block flex={avatar ? 1.7 : 2.0}>
           <Block style={styles.title}>
             <Text size={theme.SIZES.FONT * 0.875} color={titleColor}>
               {title}

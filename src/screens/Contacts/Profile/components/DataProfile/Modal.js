@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { TouchableOpacity } from 'react-native'
 import ModalSelector from 'react-native-modal-selector'
-import { Block, Text, Icon } from '../../../../../themes/galio'
-import styles from '../../styles'
+
+import {Block, Text, Icon, styles } from '../../../../../layout'
 
 export default class Modal extends Component {
     constructor(props){

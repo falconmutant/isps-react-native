@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Block, Text, Icon, Radio } from '../../../../../themes/galio'
-import styles, {COLORS} from '../../styles'
+
+import {Block, Radio, Text, Icon, styles, COLORS } from '../../../../../layout'
 
 export default class RadioCategory extends Component {
     constructor(props){

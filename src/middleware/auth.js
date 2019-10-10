@@ -7,8 +7,11 @@ import {reset} from 'redux-form';
 
 const getToken = (state) => state.auth.token;
 
+
 export function* LoginDarwin(data){
+    console.log('entra login', data);
     const response = yield call(loginApi, data.payload);
+    console.log('pasa', response);
     yield put(reset('SignInForm'));
     if(!response.hasOwnProperty('MayaMessage')){
         yield put({ type: actionsReducers.LOGIN_SUCCESS, payload: response });

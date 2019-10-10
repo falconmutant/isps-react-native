@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { TouchableOpacity, Image, PermissionsAndroid, Alert } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker';
 import ModalSelector from 'react-native-modal-selector'
-import {width, height} from './styles'
-import {url} from '../../../constants'
+
+import {width, height, url} from '../../../layout'
 
 export default class Picture extends Component {
     constructor(props){
         super(props);
-        const {image} = this.props.contact;
+        const {image} = props.contact;
         this.state = {
             image: image ? {uri: url(image.image)}: require('../../../assets/images/avatar.png'),
             visible: false,
@@ -35,7 +35,7 @@ export default class Picture extends Component {
           width: 500,
           height: 500,
           includeExif: true,
-          mediaType,
+          mediaType
         }).then(image => {
           console.log('received image', image);
           this.setState({

@@ -1,13 +1,27 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Block } from '../../../themes/galio'
-import { Header } from "../../../components/material"
-import { actionsReducers } from "../../../constants"
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, ToastAndroid } from 'react-native';
 import Contacts from 'react-native-contacts';
+import { connect } from 'react-redux'
 
-import Card from './Card'
-import Search from './Search'
+import ListItem from './ListItem'
+import Avatar from './Avatar'
+
+import { Screen, Radio, styles, COLORS, actionsReducers } from '../../../layout'
+
+
+const Toast = (props) => {
+    if (props.visible) {
+      ToastAndroid.showWithGravityAndOffset(
+        props.message,
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+      return null;
+    }
+    return null;
+};
 
 
 class Import extends Component {
@@ -15,7 +29,8 @@ class Import extends Component {
         super(props);
         this.search = this.search.bind(this);
         this.state = {
-            contacts: []
+            contacts: [],
+            visible: false,
         };
     }
 
@@ -57,24 +72,88 @@ class Import extends Component {
         }
     }
 
-    renderSearch = () => <Search onChangeText={this.search} {...this.props} />;
+    onImport = (contact) => {
+        console.log(contact)
+        const phones = [];
+        contact.phoneNumbers.map(phone => {
+            const number = phone.number.replace(/ /g, "").replace("+521", "");
+            const type = phone.label.toUpperCase();
+            phones.push({
+                areaCode: number.substring(0, 3),
+                phoneNumber: number.substring(3, 10),
+                phoneType: type,
+            })
+        });
 
-    renderCards = () => <Card contacts={this.state.contacts} {...this.props} />;
+        this.props.saveImport({
+            fullName: `${contact.givenName} ${contact.familyName !== 'undefined' ? connect.familyName : ''}`,
+            phone: phones,
+        })
+        this.setState(
+            {
+              visible: true,
+            },
+            () => {
+              this.hideToast();
+            },
+        );
+    }
+
+    hideToast = () => {
+        this.setState({
+          visible: false,
+        });
+    };
 
     render() {
         const {navigation} = this.props;
+        const {contacts} = this.state;
         return (
-            <Block flex center style={styles.home}>
-                <Header back style={styles.header} search title="Importar" navigation={navigation} renderSearch={this.renderSearch()} />
-                {this.renderCards()}
-            </Block>
+            <Screen
+            back
+            search
+            onChangeSearch={this.search}
+            placeholderSearch='Buscar contacto'
+            title="Importar Contacto"
+            navigation={navigation}>
+                {contacts.map(contact => {
+                    return(
+                        <ListItem
+                            leftElement={
+                                <Avatar
+                                    img={
+                                    contact.hasThumbnail
+                                        ? { uri: contact.thumbnailPath }
+                                        : require("../../../assets/images/avatar.png")
+                                    }
+                                    width={40}
+                                    height={40}
+                                />
+                            }
+                            key={contact.recordID}
+                            title={`${contact.givenName} ${contact.familyName ? contact.familyName : ''}`}
+                            description={`${contact.company}`}
+                            rightElement={<Radio
+                                label=''
+                                color={COLORS.BLUE}
+                                initialValue={false}
+                                onChange={() => this.onImport(contact)}
+                            />}
+                        />
+                    )
+                })}
+                <Toast visible={this.state.visible} message="Contacto Importado" />
+            </Screen>
         );
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     saveImport: (contact) => {
-        dispatch({ type: actionsReducers.SAVE_CONTACT_IMPORT });
+        dispatch({
+            type: actionsReducers.NEW_CONTACT,
+            payload: contact,
+        });
     },
 });
 

@@ -1,15 +1,14 @@
 export const actionTypes = {
     LOGIN: 'LOGIN',
+    REGISTER: 'REGISTER',
+    LOGOUT: 'LOGOUT',
+    VALIDATE: 'VALIDATE',
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
     LOGIN_FAIL: 'LOGIN_FAIL',
-    REGISTER: 'REGISTER',
     REGISTER_SUCCESS: 'REGISTER_SUCCESS',
     REGISTER_FAIL: 'REGISTER_FAIL',
-    LOGOUT: 'LOGOUT',
     LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
-    VALIDATE_AUTH: 'VALIDATE_AUTH',
     AUTH_ERROR: 'AUTH_ERROR',
-    CHECK_SESSION: 'CHECK_SESSION',
     CREATE_SESSION: 'CREATE_SESSION',
     DELETE_SESSION: 'DELETE_SESSION',
 };
@@ -45,7 +44,6 @@ export default function (state = initialState, action) {
                 isAuthenticated: true,
                 user: action.payload,
             };
-        case actionTypes.CHECK_SESSION:
         default:
             return state;
     }

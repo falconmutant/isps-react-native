@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { TouchableOpacity } from 'react-native'
 import Dialog from 'react-native-dialog'
-import { Block, Text, Icon } from '../../../../../themes/galio'
-import styles from '../../styles'
+
+import {Block, Text, Icon, styles } from '../../../../../layout'
 
 export default class DialogName extends Component {
     constructor(props){
