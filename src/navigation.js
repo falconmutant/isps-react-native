@@ -213,8 +213,8 @@ const HomeStack = createStackNavigator(
 	{
 		Home: {
 			screen: screens.Dashboard,
-			navigationOptions: ({navigation}) => ({
-				header: <Header title="Home" navigation={navigation} />,
+			navigationOptions: () => ({
+				header: null,
 			})
 		},
 		Contacts: {
@@ -231,8 +231,8 @@ const HomeStack = createStackNavigator(
 		},
 		SignOut: {
 			screen: screens.SignOut,
-			navigationOptions: ({navigation}) => ({
-				header: <Header back white transparent title="" navigation={navigation} />,
+			navigationOptions: () => ({
+				headerTransparent: true,
 			})
 		},
 		Map: {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { PermissionsAndroid, ToastAndroid } from 'react-native';
+import { PermissionsAndroid, ToastAndroid, ActivityIndicator } from 'react-native';
 import Contacts from 'react-native-contacts';
+import Spinner from 'react-native-spinkit'
 import { connect } from 'react-redux'
 
 import ListItem from './ListItem'
@@ -31,6 +32,10 @@ class Import extends Component {
         this.state = {
             contacts: [],
             visible: false,
+            spinner: false,
+            color: COLORS.BLUE,
+            size: 100,
+            type: 'ChasingDots',
         };
     }
 
@@ -40,6 +45,7 @@ class Import extends Component {
                 title: "Contactos",
                 message: "Esta aplicación quiere acceder a tus contactos"
             }).then(() => {
+                this.setState({spinner: true});
                 this.loadContacts();
             });
         } else {
@@ -47,12 +53,12 @@ class Import extends Component {
         }
     }
 
-    loadContacts() {
+    async loadContacts() {
         Contacts.getAll((err, contacts) => {
             if (err === "denied") {
                 console.warn("Permiso denegado");
             } else {
-                this.setState({ contacts });
+                this.setState({ contacts, spinner: false });
             }
         });
     }
@@ -86,7 +92,7 @@ class Import extends Component {
         });
 
         this.props.saveImport({
-            fullName: `${contact.givenName} ${contact.familyName !== 'undefined' ? connect.familyName : ''}`,
+            fullName: `${contact.displayName}`,
             phone: phones,
         })
         this.setState(
@@ -107,7 +113,7 @@ class Import extends Component {
 
     render() {
         const {navigation} = this.props;
-        const {contacts} = this.state;
+        const {contacts, spinner, size, type, color} = this.state;
         return (
             <Screen
             back
@@ -116,6 +122,7 @@ class Import extends Component {
             placeholderSearch='Buscar contacto'
             title="Importar Contacto"
             navigation={navigation}>
+                <Spinner style={styles.spinner} isVisible={spinner} size={size} type={type} color={color}/>
                 {contacts.map(contact => {
                     return(
                         <ListItem

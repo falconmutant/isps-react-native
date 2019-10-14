@@ -191,8 +191,8 @@ export default StyleSheet.create({
         overflow: 'hidden',
     },
     scroll: {
-        width: width - theme.SIZES.BASE * 2,
-        paddingVertical: theme.SIZES.BASE * 2,
+        width: width - SIZES.BASE * 2,
+        paddingVertical: SIZES.BASE * 2,
     },
     rows: {
         height: SIZES.BASE * 2,
@@ -223,4 +223,10 @@ export default StyleSheet.create({
         height: SIZES.CARD_AVATAR_HEIGHT,
         borderRadius: SIZES.CARD_AVATAR_RADIUS,
     },
+    spinner: {
+        marginTop: height / 4,
+        marginBottom: 50,
+        width: width - SIZES.BASE * 2,
+        //height: (height / 2) + SIZES.BASE,
+    },    
 });

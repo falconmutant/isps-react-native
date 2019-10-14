@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { ScrollView } from 'react-native'
 import { DrawerActions } from 'react-navigation'
+import Spinner from 'react-native-spinkit'
 
-import { Block, styles } from '../../layout'
+import { Screen, styles } from '../../layout'
 
 class Dashboard extends Component {
     componentDidMount(){
@@ -13,12 +14,10 @@ class Dashboard extends Component {
     render() {
         const {navigation} = this.props;
         return (
-            <Block flex center style={styles.home}>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.products}>
-                </ScrollView>
-            </Block>
+            <Screen
+            title="Home"
+            navigation={navigation}>
+            </Screen>
         );
     }
 }

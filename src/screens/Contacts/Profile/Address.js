@@ -51,12 +51,13 @@ export default class Address extends Component {
             navigation={navigation}
             floating={true}
             dataFloating={actions}
-            onPressFloating={name => name === 'bt_new' ? navigation.navigate('NewAddress', {
-                    contact,
-                    addAddrs: this.addAddrs.bind(this),
-                }) : null}>
+            onPressFloating={name => name === 'bt_new' ? navigation.navigate('NewAddress', {contact}) : null}>
                 {address.map((adrs, i) => (
-                    <TouchableOpacity key={i} onPress={() => navigation.navigate('NewAddress', {contact, address: adrs})}>
+                    <TouchableOpacity key={i} onPress={() => navigation.navigate('NewAddress', {
+                            contact,
+                            address: adrs,
+                            addAddrs: this.addAddrs.bind(this),
+                        })}>
                         <Card
                             flex
                             borderless
