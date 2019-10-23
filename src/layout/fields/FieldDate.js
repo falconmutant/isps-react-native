@@ -2,20 +2,21 @@ import React, { Component } from 'react'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import PropTypes from 'prop-types'
 
-import { RowList, months } from '../../../layout'
+import { RowList, months } from '../index'
 
 
 export default class FieldDate extends Component {
     static propTypes = {
         saveField: PropTypes.func.isRequired,
-        fields: PropTypes.object.isRequired,
-        name: PropTypes.string,
+        data: PropTypes.object.isRequired,
     }
 
     constructor(props){
         super(props);
-        const {date, display} = this.getDate();
+        const {data, name} = props.data;
+        const {date, display} = data ? this.getDate(data) : this.getDate();
         this.state={
+            name,
             display,
             visible: false,
             value: date,
@@ -25,7 +26,8 @@ export default class FieldDate extends Component {
     getDate = (value=null) =>{
         const date = (value === null) ? new Date() : new Date(value);
         const fecha = `${date.getDate()} de ${months[date.getMonth()]} del ${date.getFullYear()}`;
-        const hora = `a las ${date.getHours()}:${date.getMinutes()} hrs.`
+        const minutes = date.getMinutes() < 10 ? `${date.getMinutes()}0` : date.getMinutes();
+        const hora = `a las ${date.getHours()}:${minutes} hrs.`
         return {date, display: `${fecha} ${hora}`}
     }
 
@@ -38,7 +40,7 @@ export default class FieldDate extends Component {
             value: date,
         });
         this.props.saveField({
-            [this.props.name] : value,
+            [this.state.name] : value,
         });
     }
 

@@ -18,6 +18,7 @@ function* Darwin(){
     yield takeLatest(actionsReducers.MODIFY_PROFILE_CONTACT, contact.ModifyContactDarwin);
     yield takeLatest(actionsReducers.GET_EVENTS, event.EventsDarwin);
     yield takeLatest(actionsReducers.SAVE_EVENT, event.SaveEventDarwin);
+    yield takeLatest(actionsReducers.MODIFY_EVENT, event.ModifyEventDarwin);
     yield takeLatest(actionsReducers.GET_CATEGORIES, event.CategoriesDarwin);
     yield takeLatest(actionsReducers.SAVE_CATEGORY, event.SaveCategoryDarwin);
     yield takeLatest(actionsReducers.GET_CATALOGS, catalog.CatalogsDarwin);

@@ -26,7 +26,7 @@ class Catalogs extends Component {
         ],
         catalogs: [],
         visible: false,
-        catalog: '',
+        value: '',
     }
 
     componentDidMount(){
@@ -81,7 +81,7 @@ class Catalogs extends Component {
 
     render() {
         const {navigation} = this.props;
-        const {catalogs, catalog, visible, data, actions} = this.state
+        const {catalogs, value, visible, data, actions} = this.state
         return (
             <Screen
             search
@@ -124,8 +124,8 @@ class Catalogs extends Component {
                         type={'default'}
                         placeholder={'Nombre del catalogo'}
                         style={{width: width - SIZES.BASE * 4}}
-                        onChangeText={(e) => this.setState({catalog: e})}
-                        value={catalog}
+                        onChangeText={(e) => this.setState({value: e})}
+                        value={value}
                     />
                 </Dialog>
             </Screen>

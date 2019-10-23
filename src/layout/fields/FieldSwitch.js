@@ -1,33 +1,36 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { Block, Text, Switch, styles, COLORS } from '../../../layout'
+import { Block, Text, Switch, styles, COLORS } from '../index'
 
 export default class FieldPublic extends Component {
     static propTypes = {
         saveField: PropTypes.func.isRequired,
-        fields: PropTypes.object.isRequired,
+        data: PropTypes.object.isRequired,
     }
 
     constructor(props){
         super(props);
+        const {name, display, data} = props.data;
         this.state = {
-            value: false
+            name,
+            display,
+            value: data,
         }
     }
 
     onChange = () => {
-        const {value} = this.state;
+        const {name, value} = this.state;
         this.props.saveField({
-            isPublic: value
+            [name]: value
         });
     }
 
     render() {
-        const {value} = this.state
+        const {display, value} = this.state
         return (
             <Block row middle space="between" style={styles.rows}>
-                <Text size={14}>Todo el día</Text>
+                <Text size={14}>{display}</Text>
                 <Switch
                     ios_backgroundColor={COLORS.GREY}
                     thumbColor={Platform.OS === 'android' ? COLORS.GREY : null}

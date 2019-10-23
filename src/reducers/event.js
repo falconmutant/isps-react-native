@@ -1,5 +1,6 @@
 export const actionTypes = {
     SAVE_EVENT: 'SAVE_EVENT',
+    MODIFY_EVENT: 'MODIFY_EVENT',
     ADD_EVENT: 'ADD_EVENT',
     GET_EVENTS: 'GET_EVENTS',
     SET_EVENTS: 'SET_EVENTS',

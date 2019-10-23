@@ -12,9 +12,9 @@ export default class FieldName extends Component {
 
     constructor(props){
         super(props);
-        const {input, display, icon, title, subtitle, type, placeholder} = props.data;
+        const {name, display, icon, title, subtitle, type, placeholder} = props.data;
         this.state={
-            input,
+            name,
             display,
             icon: icon ? icon: 'pencil-square-o',
             visible: false,
@@ -36,8 +36,8 @@ export default class FieldName extends Component {
     }
 
     onConfirm = () => {
-        const {input, value} = this.state;
-        this.props.saveField({ [input]: value });
+        const {name, value} = this.state;
+        this.props.saveField({ [name]: value });
         this.setState({ display: value, visible: false, value: '' });
     }
 

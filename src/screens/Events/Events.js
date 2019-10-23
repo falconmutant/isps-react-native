@@ -108,7 +108,7 @@ class Events extends Component {
             dataFloating={actions}
             onPressFloating={this.onPress}>
                 {data.map((event, i) => (
-                    <TouchableOpacity key={i} onPress={() => navigation.navigate('Detail', {event})}>
+                    <TouchableOpacity key={i} onPress={() => navigation.navigate('NewEvent', {event})}>
                         <Card
                             flex
                             borderless

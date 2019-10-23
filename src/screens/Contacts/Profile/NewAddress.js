@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import {Screen, BlockList, Block, FieldInput, FieldAddress, Button, styles, width, COLORS, SIZES, actionsReducers } from '../../../layout'
+import {Screen, BlockList, Block, Field, Button, styles, width, COLORS, SIZES, actionsReducers } from '../../../layout'
 
 
 class NewAddress extends Component {
@@ -14,62 +14,78 @@ class NewAddress extends Component {
             contact: this.contact,
             inputs:[
                 {
-                    input: 'name',
+                    name: 'name',
                     display: typeof this.address === 'object' ? this.address.name ? this.address.name : 'Nombre Direccíon' : 'Nombre Direccíon',
                     title: 'Nombre Dirección',
                     subtitle: 'Ingresa un nombre para la dirección',
                     placeholder: 'Nombre de la Dirección',
+                    input: 'Dialog',
                 },
                 {
-                    input: 'street',
+                    name: 'street',
                     display: typeof this.address === 'object' ? this.address.street ? this.address.street : 'Nombre Calle'  : 'Nombre Calle',
                     title: 'Nombre Calle',
                     subtitle: 'Ingresa nombre de la calle',
                     placeholder: 'Nombre de calle',
+                    input: 'Dialog',
                 },
                 {
-                    input: 'number',
+                    name: 'number',
                     display: typeof this.address === 'object' ? this.address.number ? this.address.number : 'Número y/o Apartamento' : 'Número y/o Apartamento',
                     type: 'number-pad',
                     title: 'Número Ext y/o Int',
                     subtitle: 'Ingresa número de la dirección',
                     placeholder: 'Número',
+                    input: 'Dialog',
                 },
                 {
-                    input: 'community',
+                    name: 'community',
                     display: typeof this.address === 'object' ? this.address.community ? this.address.community : 'Colonia' : 'Colonia',
                     title: 'Colonia',
                     subtitle: 'Ingresa la Colonia',
                     placeholder: 'Colonia',
+                    input: 'Dialog',
                 },
                 {
-                    input: 'zipCode',
+                    name: 'zipCode',
                     display: typeof this.address === 'object' ? this.address.zipCode ? this.address.zipCode : 'Codigo Postal' : 'Codigo Postal',
                     type: 'decimal-pad',
                     title: 'Codigo Postal',
                     subtitle: 'Ingresa codigo postal',
                     placeholder: 'Codigo Postal',
+                    input: 'Dialog',
                 },
                 {
-                    input: 'city',
+                    name: 'city',
                     display: typeof this.address === 'object' ? this.address.city ? this.address.city : 'Ciudad' : 'Ciudad',
                     title: 'Ciudad',
                     subtitle: 'Ingresa la Ciudad',
                     placeholder: 'Ciudad',
+                    input: 'Dialog',
                 },
                 {
-                    input: 'state',
+                    name: 'state',
                     display: typeof this.address === 'object' ? this.address.state ? this.address.state : 'Estado' : 'Estado',
                     title: 'Estado',
                     subtitle: 'Ingresa el Estado',
                     placeholder: 'Estado',
+                    input: 'Dialog',
                 },
                 {
-                    input: 'country',
+                    name: 'country',
                     display: typeof this.address === 'object' ? this.address.country ? this.address.country : 'País' : 'País',
                     title: 'País',
                     subtitle: 'Ingresa el País',
                     placeholder: 'País',
+                    input: 'Dialog',
+                },
+                {
+                    name: 'address',
+                    input: 'Address',
+                    data: typeof this.address === 'object' ? {
+                        latitude: this.address.latitude,
+                        longitude: this.address.longitude
+                    } : null,
                 },
             ],
             data: typeof this.address === 'object' ? {...this.address} : {},
@@ -112,21 +128,8 @@ class NewAddress extends Component {
                 <BlockList title='Datos de la Dirección' description='Nombre, Ciudad, Estado.'>
                     <Block style={{marginVertical: SIZES.CARD_MARGIN_VERTICAL}}>
                         {inputs.map((input, i) =>(
-                            <FieldInput dialog key={i} data={input} saveField={this.saveField} />
+                            <Field key={i} data={input} saveField={this.saveField} />
                         ))}
-                        {
-                            typeof this.address === 'object' ?
-                                <FieldAddress 
-                                navigation={navigation} 
-                                saveField={this.saveField} 
-                                region={true}
-                                latitude={this.address.latitude}
-                                longitude={this.address.longitude} /> : 
-                                <FieldAddress 
-                                navigation={navigation} 
-                                saveField={this.saveField}
-                                region={false} />
-                        }
                         <Block style={[styles.rows, {marginTop: SIZES.BASE}]}>
                             <Button
                                 round

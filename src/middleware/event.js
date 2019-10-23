@@ -26,6 +26,17 @@ export function* SaveEventDarwin(data){
     }
 }
 
+export function* ModifyEventDarwin(data){
+    const auth = yield select(getAuth);
+    const response = yield call(ModifyEventsApi, {data: data.payload, ...auth});
+    if(response.hasOwnProperty('MayaMessage')){
+        Alert.alert(response.MayaMessage);
+    }else{
+        yield put({ type: actionsReducers.ADD_EVENT, payload: response });
+        yield put(NavigationActions.navigate({ routeName: 'Events' }));
+    }
+}
+
 export function* CategoriesDarwin(){
     const auth = yield select(getAuth);
     const response = yield call(CategoriesApi, {...auth});
@@ -54,6 +65,20 @@ const SaveEventsApi = ({data, token}) => {
         data: {
             target: 'event',
             action: 'add',
+            model: {
+                ...data
+            }
+        }
+    });
+};
+
+const ModifyEventsApi = ({data, token}) => {
+    return MayaQuery({
+        target: 'api/',
+        token,
+        data: {
+            target: 'event',
+            action: 'modify',
             model: {
                 ...data
             }

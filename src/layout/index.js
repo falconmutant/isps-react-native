@@ -17,7 +17,7 @@ import {
 } from './galio'
 import {Header, Drawer} from './material'
 import {Search, Tabs, Menu, Dialog} from './components'
-import {FieldInput, FieldAddress} from './fields'
+import {FieldInput, FieldAddress, FieldDate, FieldSwitch, Field} from './fields'
 import styles, {width, height, COLORS, SIZES} from './styles'
 
 
@@ -54,6 +54,9 @@ export {
     Dialog,
     FieldInput,
     FieldAddress,
+    FieldDate,
+    FieldSwitch,
+    Field,
     styles,
     width,
     height,

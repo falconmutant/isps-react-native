@@ -1,62 +1,135 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {Screen, BlockList, RowList, Block, Button, styles, COLORS, SIZES, width, actionsReducers } from '../../layout'
-
-import { FieldName, FieldDate, FieldPublic, FieldAddress } from './fields'
+import {Screen, BlockList, RowList, Field, Block, Button, styles, COLORS, SIZES, width, actionsReducers } from '../../layout'
 
 
 class NewEvents extends Component {
     constructor(props){
         super(props);
-        this.state={}
+        this.event = props.navigation.getParam('event', 'No event');
+        this.state={
+            form: [
+                {
+                    title: 'Datos del evento',
+                    description: 'Nombre, Fecha, Evento Publico.',
+                    inputs:[
+                        {
+                            name: 'name',
+                            display: typeof this.event === 'object' ? this.event.name ? this.event.name : 'Nombre Evento' : 'Nombre Evento',
+                            title: 'Nombre Evento',
+                            subtitle: 'Ingresa un nombre para el evento',
+                            placeholder: 'Nombre del evento',
+                            input: 'Dialog',
+                        },
+                        {
+                            name: 'start',
+                            data: typeof this.event === 'object' ? this.event.start ? this.event.start : null : null,
+                            input: 'Date',
+                        },
+                        {
+                            name: 'end',
+                            data: typeof this.event === 'object' ? this.event.end ? this.event.end : null : null,
+                            input: 'Date',
+                        },
+                        {
+                            name: 'isPublic',
+                            display: 'Todo el día',
+                            data: typeof this.event === 'object' ? this.event.isPublic : false,
+                            input: 'Switch',
+                        },
+                    ]
+                },
+                {
+                    title: 'Lugar del evento',
+                    description: '',
+                    inputs: [
+                        {
+                            name: 'address',
+                            data: typeof this.event === 'object' ? {
+                                latitude: this.event.latitude,
+                                longitude: this.event.longitude,
+                            } : null,
+                            input: 'Address',
+                        }
+                    ]
+                },
+                {
+                    title: 'Configuración',
+                    description: 'Notificaciones, Categoria, Extras.',
+                    inputs: [
+                        {
+                            display: 'Notificaciones',
+                            icon: 'bell',
+                            onPress: () => props.navigation.navigate('No'),
+                            input: 'Row',
+                        },
+                        {
+                            display: 'Contactos',
+                            icon: 'users',
+                            onPress: () => props.navigation.navigate('No'),
+                            input: 'Row',
+                        },
+                        {
+                            display: 'Categorias',
+                            icon: 'list',
+                            onPress: () => props.navigation.navigate('No'),
+                            input: 'Row',
+                        },
+                        {
+                            display: 'Notas',
+                            icon: 'file',
+                            onPress: () => props.navigation.navigate('No'),
+                            input: 'Row',
+                        },
+                        {
+                            display: typeof this.event === 'object' ? 'Modificar' : 'Guardar',
+                            onPress: typeof this.event === 'object' ? this.modifyEvent.bind(this) : this.saveEvent.bind(this),
+                            input: 'Button',
+                        },
+                    ],
+                }
+            ],
+            modify: typeof this.event === 'object' ? true : false,
+            event: this.event,
+        }
     }
 
     saveField = field => {
-        this.setState(field);
-        console.log(field, this.state);
+        const {event} = this.state;
+        this.setState({
+            data: {
+                ...event,
+                ...field,
+            }
+        })
     };
 
     saveEvent = e => {
         e.preventDefault();
-        this.props.AddEvent(this.state);
+        this.props.AddEvent(this.data);
     };
 
+    modifyEvent = e => {
+        e.preventDefault();
+    }
+
     render() {
+        const {form} = this.state;
         const {navigation} = this.props;
         return (
             <Screen
             back
             title="Nuevo Evento"
             navigation={navigation}>
-                <BlockList title='Datos del evento' description='Nombre, Fecha, Publico.'>
-                    <Block style={{marginVertical: SIZES.CARD_MARGIN_VERTICAL}}>
-                        <FieldName saveField={this.saveField} fields={this.state} />
-                        <FieldDate name='start' saveField={this.saveField} fields={this.state} />
-                        <FieldDate name='end' saveField={this.saveField} fields={this.state} />
-                        <FieldPublic saveField={this.saveField} fields={this.state} />
-                    </Block>
-                </BlockList>
-                <BlockList title='Lugar del evento' description=''>
-                    <FieldAddress navigation={navigation} saveField={this.saveField} fields={this.state} />
-                </BlockList>
-                <BlockList title='Configuración' description='Notificaciones, Categoria, Extras.'>
-                    <Block style={{marginVertical: SIZES.CARD_MARGIN_VERTICAL}}>
-                        <RowList display='Notificaciones' icon='bell' onPress={() => navigation.navigate('No')} />
-                        <RowList display='Contactos' icon='users' onPress={() => navigation.navigate('No')} />
-                        <RowList display='Categorias' icon='list' onPress={() => navigation.navigate('No')} />
-                        <RowList display='Notas' icon='file' onPress={() => navigation.navigate('No')} />
-                        <Block style={[styles.rows, {marginTop: SIZES.BASE}]}>
-                            <Button
-                                round
-                                color={COLORS.BLUE}
-                                onPress={this.saveEvent}
-                                style={{width: width - SIZES.BASE * 4}}
-                            >
-                                Guardar
-                            </Button>
+                {form.map((block, i) => (
+                    <BlockList key={i} title={block.title} description={block.description}>
+                        <Block style={{marginVertical: SIZES.CARD_MARGIN_VERTICAL}}>
+                            {block.inputs.map((input, i) => (
+                                <Field key={i} data={input} saveField={this.saveField} />
+                            ))}
                         </Block>
-                    </Block>
-                </BlockList>
+                    </BlockList>
+                ))}
             </Screen>
         )
     }
@@ -66,6 +139,12 @@ const mapDispatchToProps = dispatch => ({
     AddEvent: (data) => {
         dispatch({
             type: actionsReducers.SAVE_EVENT,
+            payload: data,
+        });
+    },
+    modifyEvent: (data) => {
+        dispatch({
+            type:actionsReducers.MODIFY_EVENT,
             payload: data,
         });
     },
