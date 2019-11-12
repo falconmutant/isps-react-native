@@ -29,13 +29,16 @@ class Catalogs extends Component {
         value: '',
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.subs = [
             this.props.navigation.addListener('willFocus', () => {
                 this.props.getCatalogs();
-                this.setState({ catalogs: this.props.catalogs});
             }),
         ];
+    }
+
+    componentDidMount(){
+        this.setState({ catalogs: this.props.catalogs});
     }
 
     componentWillUnmount () {
@@ -53,7 +56,7 @@ class Catalogs extends Component {
             const {catalogs} = this.props;
             const matching = [];
             catalogs.map(catalog =>{
-                if(catalog.catalog_name.indexOf(text) >= 0) matching.push(catalog)
+                if(catalog['catalog_name'].indexOf(text) >= 0) matching.push(catalog)
             });
             this.setState({ catalogs: matching });
         }
@@ -67,16 +70,17 @@ class Catalogs extends Component {
     onCancel = () => {
         this.setState({
             visible: false,
-            catalog: '',
+            value: '',
         });
     }
 
     onConfirm = () => {
-        const {catalog} = this.state;
+        const {value} = this.state;
         this.props.saveCatalog({
-            catalog_name: catalog
+            'catalog_name': value
         });
-        this.setState({ visible: false, catalog: '' })
+        this.setState({ visible: false, value: '' })
+        this.props.getCatalogs();
     }
 
     render() {
@@ -103,7 +107,7 @@ class Catalogs extends Component {
                             style={styles.card}
                             image={catalog.image ? {uri: catalog.image.image} : require('../../assets/images/nodisponible.jpg')}
                             footer={true}
-                            title={catalog.catalog_name}
+                            title={catalog['catalog_name']}
                             caption={''}
                             location={`${catalog.products.length} Productos`}
                             imageStyle={styles.cardImageRadius}

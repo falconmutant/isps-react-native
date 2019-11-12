@@ -45,10 +45,11 @@ class NewEvents extends Component {
                     inputs: [
                         {
                             name: 'address',
-                            data: typeof this.event === 'object' ? {
-                                latitude: this.event.latitude,
-                                longitude: this.event.longitude,
-                            } : null,
+                            data:  {
+                                latitude: typeof this.event === 'object' ? parseFloat(this.event.latitude) : 0,
+                                longitude: typeof this.event === 'object' ? parseFloat(this.event.longitude) : 0,
+                            },
+                            find: typeof this.event === 'object' ? false : true,
                             input: 'Address',
                         }
                     ]

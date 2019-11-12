@@ -10,10 +10,10 @@ import { Block, styles, width, height } from '../index'
 export default class FieldAddress extends Component {
     constructor(props){
         super(props);
-        const {latitude, longitude} = props.data ? props.data : {latitude: 0, longitude: 0};
+        const {data, find} = props.data;
         this.state = {
-            latitude,
-            longitude,
+            ...data,
+            find,
             error: null
         };
     }
@@ -25,10 +25,10 @@ export default class FieldAddress extends Component {
                 title: "Ubicación",
                 message: "Esta aplicación requiere acceder a tu ubicación"
             }).then(() => {
-                if(!this.props.data) this.findCoordinates();
+                if(this.state.find) this.findCoordinates();
             });
         } else {
-            if(!this.props.data) this.findCoordinates();
+            if(this.state.find) this.findCoordinates();
         }
     }
 

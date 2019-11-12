@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PermissionsAndroid, ToastAndroid, ActivityIndicator } from 'react-native';
+import { PermissionsAndroid, ToastAndroid } from 'react-native';
 import Contacts from 'react-native-contacts';
 import Spinner from 'react-native-spinkit'
 import { connect } from 'react-redux'

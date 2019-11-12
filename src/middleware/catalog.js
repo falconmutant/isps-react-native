@@ -19,7 +19,7 @@ export function* SaveCatalogDarwin(data){
     const auth = yield select(getAuth);
     const response = yield call(SaveCatalogApi, {data: data.payload, ...auth});
     if(response.hasOwnProperty('MayaMessage')){
-        Alert.alert(response.MayaMessage);
+        Alert.alert(JSON.stringify(response.MayaMessage));
     }else{
         yield put({ type: actionsReducers.ADD_CATALOG, payload: response });
         yield put(NavigationActions.navigate({ routeName: 'Catalogs' }));
